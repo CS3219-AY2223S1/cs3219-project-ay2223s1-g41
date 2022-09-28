@@ -14,7 +14,7 @@
    NEXTAUTH_URL=http://localhost:3000
    ```
 
-3. In the root directory, run `pnpm install`
+3. In the root directory, run `pnpm install` or `npm install` (`pnpm` is the recommended package manager here, if you do not have `pnpm` installed please try to install it, it is way better than `npm`)
 
 4. Run `pnpm dev`
 
