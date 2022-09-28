@@ -1,14 +1,21 @@
-# CS3219-AY22-23-Project-Skeleton
+# PeerPrep - G41
 
-This is a template repository for CS3219 project.
+## Getting Started
 
-## User Service
-1. Rename `.env.sample` file to `.env`.
-2. Create a Cloud DB URL using Mongo Atlas.
-3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
-4. Install npm packages using `npm i`.
-5. Run User Service using `npm run dev`.
+1. Create `.env.local` file in the root directory
 
-## Frontend
-1. Install npm packages using `npm i`.
-2. Run Frontend using `npm start`.
+2. Add the following lines:
+   
+   ```markdown
+   MONGO_URI=mongodb+srv://peerprep:peerprep@peerprep-g41.lvzxhrp.mongodb.net/?retryWrites=true&w=majority
+   MONGO_DB=peerprep
+   MONGO_COLLECTION=users
+   NEXTAUTH_SECRET=0jtDHssr83fgtJKroV6DGQ6uD9BXW4+FvPbehI9zUXY=
+   NEXTAUTH_URL=http://localhost:3000
+   ```
+
+3. In the root directory, run `pnpm install`
+
+4. Run `pnpm dev`
+
+5. Go to `localhost:3000` and see!
