@@ -8,6 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import { CheckIcon, ChevronDownIcon, XIcon } from "@heroicons/react/solid";
+import FoundMatchModal from "../components/FoundMatchModal";
 
 const difficulty = [
   { id: 1, difficulty: "Easy" },
@@ -147,7 +148,6 @@ export default function Dashboard() {
   const [isFindingMatch, setIsFindingMatch] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
-
   return (
     <>
       <Head>
@@ -186,6 +186,7 @@ export default function Dashboard() {
           foundMatchCountdown={foundMatchCountdown}
           setFoundMatchCountdown={setFoundMatchCountdown}
           setIsInMatch={setIsInMatch}
+        />
         <FindingMatchModal
           isFindingMatch={isFindingMatch}
           setIsFindingMatch={setIsFindingMatch}
