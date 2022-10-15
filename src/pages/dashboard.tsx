@@ -55,7 +55,9 @@ const DifficultyButton = ({
               value={d}
               className={({ active }) =>
                 `relative cursor-default select-none py-2 pl-10 pr-4 w-200${
-                  active ? "bg-green-100 text-green-800" : "text-gray-900"
+                  active
+                    ? "bg-green-100 text-green-800"
+                    : "text-gray-900 dark:text-black"
                 }`
               }
             >
@@ -138,8 +140,13 @@ export default function Dashboard() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     Array<{ id: number; difficulty: string }>
   >([]);
+
+  const [matchFound, setMatchFound] = useState<boolean>(true);
+  const [foundMatchCountdown, setFoundMatchCountdown] = useState<number>(0);
+  const [isInMatch, setIsInMatch] = useState<boolean>(false);
   const [isFindingMatch, setIsFindingMatch] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+
 
   return (
     <>
@@ -165,6 +172,20 @@ export default function Dashboard() {
         >
           {isFindingMatch ? "Finding..." : "Find Match!"}
         </button>
+        <button
+          onClick={() => {
+            setMatchFound(true);
+            setFoundMatchCountdown(10);
+          }}
+        >
+          found match trigger (temporary)
+        </button>
+        <FoundMatchModal
+          matchFound={matchFound}
+          setMatchFound={setMatchFound}
+          foundMatchCountdown={foundMatchCountdown}
+          setFoundMatchCountdown={setFoundMatchCountdown}
+          setIsInMatch={setIsInMatch}
         <FindingMatchModal
           isFindingMatch={isFindingMatch}
           setIsFindingMatch={setIsFindingMatch}
