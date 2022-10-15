@@ -2,6 +2,7 @@ import { Listbox, Transition, Dialog } from "@headlessui/react";
 import Head from "next/head";
 import React, { Dispatch, SetStateAction, useState, Fragment } from "react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import io from "socket.io-client";
 
 const difficulty = [
   { id: 1, difficulty: "Easy" },
@@ -77,17 +78,70 @@ const DifficultyButton = ({
   );
 };
 
-const findMatchPopUp = () => {};
+const findMatchPopUp = (isOpen:Boolean, isMatching:Boolean , roomNum:String) => {
+  if (isOpen){
+    return(isMatching
+      ? <div>
+        Finding matching...
+        </div>
+      :
+      <div>
+        Found {roomNum}
+      </div>)
+  } else {
+    return (<></>)
+  }
+};
 
 export default function Dashboard() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     Array<{ id: number; difficulty: string }>
   >([]);
   const [isOpen, setIsOpen] = useState<Boolean>(false);
+  const [isMatching, setIsMatching] = useState<Boolean>(true);
+  const [roomNum, setRoomNum] = useState<String>("");
+  let socket:any;
 
   function openModal() {
     setIsOpen(true);
+    socketInitializer();
   }
+
+  const socketInitializer = async () => {
+    // Call default io
+    await fetch("/api/matching/socket");
+
+    socket = io();
+    // on connection
+    socket.on('connect', () => {
+      console.log('connected');
+      console.log(socket.id);
+    })
+    // matched
+    socket.on('assign-room', (room: string) => {
+      setIsMatching(false);
+      setRoomNum(room);
+      console.log('Joined room '+ room);
+    })
+    
+    socket.on("newIncomingMessage", (msg:any) => {
+      // setMessages((currentMsg) => [
+      //   ...currentMsg,
+      //   { author: msg.author, message: msg.message },
+      // ]);
+      // console.log(messages);
+    });
+  };
+  
+  const sendMessage = async () => {
+    // socket.emit("createdMessage", { author: chosenUsername, message });
+    // setMessages((currentMsg) => [
+    //   ...currentMsg,
+    //   { author: chosenUsername, message },
+    // ]);
+    // setMessage("");
+  };
+
 
   return (
     <>
@@ -110,6 +164,7 @@ export default function Dashboard() {
         >
           Find match!
         </button>
+        {findMatchPopUp(isOpen, isMatching,roomNum)}
       </main>
     </>
   );
