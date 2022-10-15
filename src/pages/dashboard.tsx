@@ -2,6 +2,7 @@ import { Listbox, Transition, Dialog } from "@headlessui/react";
 import Head from "next/head";
 import React, { Dispatch, SetStateAction, useState, Fragment } from "react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import FoundMatchModal from "../components/FoundMatchModal";
 
 const difficulty = [
   { id: 1, difficulty: "Easy" },
@@ -49,7 +50,9 @@ const DifficultyButton = ({
               value={d}
               className={({ active }) =>
                 `relative cursor-default select-none py-2 pl-10 pr-4 w-200${
-                  active ? "bg-green-100 text-green-800" : "text-gray-900"
+                  active
+                    ? "bg-green-100 text-green-800"
+                    : "text-gray-900 dark:text-black"
                 }`
               }
             >
@@ -77,13 +80,14 @@ const DifficultyButton = ({
   );
 };
 
-const findMatchPopUp = () => {};
-
 export default function Dashboard() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     Array<{ id: number; difficulty: string }>
   >([]);
   const [isOpen, setIsOpen] = useState<Boolean>(false);
+  const [matchFound, setMatchFound] = useState<boolean>(true);
+  const [foundMatchCountdown, setFoundMatchCountdown] = useState<number>(0);
+  const [isInMatch, setIsInMatch] = useState<boolean>(false);
 
   function openModal() {
     setIsOpen(true);
@@ -110,6 +114,21 @@ export default function Dashboard() {
         >
           Find match!
         </button>
+        <button
+          onClick={() => {
+            setMatchFound(true);
+            setFoundMatchCountdown(10);
+          }}
+        >
+          found match trigger (temporary)
+        </button>
+        <FoundMatchModal
+          matchFound={matchFound}
+          setMatchFound={setMatchFound}
+          foundMatchCountdown={foundMatchCountdown}
+          setFoundMatchCountdown={setFoundMatchCountdown}
+          setIsInMatch={setIsInMatch}
+        />
       </main>
     </>
   );
