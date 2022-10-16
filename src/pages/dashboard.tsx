@@ -9,6 +9,8 @@ import React, {
 } from "react";
 import { CheckIcon, ChevronDownIcon, XIcon } from "@heroicons/react/solid";
 import FoundMatchModal from "../components/FoundMatchModal";
+import io from "socket.io-client";
+import router from "next/router";
 
 const difficulty = [
   { id: 1, difficulty: "Easy" },
@@ -103,50 +105,96 @@ const findMatchPopUp = (isOpen:Boolean, isMatching:Boolean , roomNum:String) => 
 };
 
 const FindingMatchModal = ({
+  isOpen,
+  roomNum,
   isFindingMatch,
   setIsFindingMatch,
   timeLeft,
   setTimeLeft,
+  matchFound,
+  setMatchFound,
+  foundMatchCountdown,
+  setFoundMatchCountdown,
+  setIsInMatch,
 }: {
+  isOpen: Boolean;
+  roomNum: String;
   isFindingMatch: boolean;
   setIsFindingMatch: Dispatch<boolean>;
   timeLeft: number;
   setTimeLeft: Dispatch<number>;
+  matchFound: boolean;
+  setMatchFound: Dispatch<boolean>;
+  foundMatchCountdown: number;
+  setFoundMatchCountdown: Dispatch<number>;
+  setIsInMatch: Dispatch<boolean>;
 }) => {
-  if (isFindingMatch) {
-    useEffect(() => {
-      timeLeft > -3 && setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    }, [timeLeft]);
-    if (timeLeft == -3) {
-      setIsFindingMatch(false);
-      return <></>;
-    }
-    if (timeLeft <= 0) {
+  if (isOpen) {
+    if (isFindingMatch) {
+      useEffect(() => {
+        timeLeft > -3 && setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      }, [timeLeft]);
+      if (timeLeft == -3) {
+        setIsFindingMatch(false);
+        return <></>;
+      }
+      if (timeLeft <= 0) {
+        return (
+          <div className="flex flex-row items-center justify-center fixed bottom-5 bg-white h-25 w-1/2 rounded-lg">
+            <p className="text-2xl font-bold text-red-800 text-center">
+              Unable to find match! Please try again later.
+            </p>
+          </div>
+        );
+      }
+
       return (
-        <div className="flex flex-row items-center justify-center fixed bottom-5 bg-white h-25 w-1/2 rounded-lg">
-          <p className="text-2xl font-bold text-red-800 text-center">
-            Unable to find match! Please try again later.
-          </p>
+        <div className="flex flex-row items-center fixed bottom-5 bg-white h-25 w-1/2 rounded-lg">
+          <div className="flex border-r border-r-gray h-5/6 w-1/6 justify-center items-center">
+            <p className="text-2xl font-bold text-green-800 text-center">
+              {timeLeft.toString()}
+            </p>
+          </div>
+          <div className="flex justify-center items-center w-full">
+            <p className="flex text-2xl font-bold text-green-800 text-center justify-center items-center">
+              Finding match...
+            </p>
+          </div>
+          <button className="pr-5" onClick={() => setIsFindingMatch(false)}>
+            <XIcon className="w-5 h-5 text-red-800" aria-hidden="true" />
+          </button>
         </div>
       );
+    } else {
+      if (timeLeft < 0) {
+        return <></>;
+      } else {
+        return (
+          <FoundMatchModal
+            matchFound={matchFound}
+            setMatchFound={setMatchFound}
+            foundMatchCountdown={foundMatchCountdown}
+            setFoundMatchCountdown={setFoundMatchCountdown}
+            setIsInMatch={setIsInMatch}
+          />
+        );
+      }
     }
+  } else {
+    return <></>;
+  }
+};
 
-    return (
-      <div className="flex flex-row items-center fixed bottom-5 bg-white h-25 w-1/2 rounded-lg">
-        <div className="flex border-r border-r-gray h-5/6 w-1/6 justify-center items-center">
-          <p className="text-2xl font-bold text-green-800 text-center">
-            {timeLeft.toString()}
-          </p>
-        </div>
-        <div className="flex justify-center items-center w-full">
-          <p className="flex text-2xl font-bold text-green-800 text-center justify-center items-center">
-            Finding match...
-          </p>
-        </div>
-        <button className="pr-5" onClick={() => setIsFindingMatch(false)}>
-          <XIcon className="w-5 h-5 text-red-800" aria-hidden="true" />
-        </button>
-      </div>
+const findMatchPopUp = (
+  isOpen: Boolean,
+  isFindingMatch: Boolean,
+  roomNum: String
+) => {
+  if (isOpen) {
+    return isFindingMatch ? (
+      <div>Finding matching...</div>
+    ) : (
+      <div>Found {roomNum}</div>
     );
   } else {
     return <></>;
@@ -172,6 +220,42 @@ export default function Dashboard() {
   const [isInMatch, setIsInMatch] = useState<boolean>(false);
   const [isFindingMatch, setIsFindingMatch] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState<Boolean>(false);
+  const [roomNum, setRoomNum] = useState<String>("");
+  let socket: any;
+
+  function openModal() {
+    setIsOpen(true);
+    socketInitializer();
+  }
+
+  const socketInitializer = async () => {
+    // Call default io
+    await fetch("/api/matching/socket");
+
+    socket = io();
+    console.log(socket);
+    // on connection
+    socket.on("connect", () => {
+      console.log("connected");
+      console.log(socket.id);
+    });
+    // matched
+    socket.on("assign-room", (room: string) => {
+      setIsFindingMatch(false);
+      setMatchFound(true);
+      setFoundMatchCountdown(10);
+      if (isInMatch) {
+        console.log(isInMatch);
+        console.log("here");
+        setRoomNum(room);
+        console.log("Joined room " + room);
+        setTimeout(() => {
+          router.replace("/coderoom/" + room).then((r) => r);
+        }, 3000);
+      }
+    });
+  };
 
   const socketInitializer = async () => {
     // Call default io
@@ -215,10 +299,12 @@ export default function Dashboard() {
           onClick={() => {
             setIsFindingMatch(true);
             setTimeLeft(10);
+            openModal();
           }}
         >
           {isFindingMatch ? "Finding..." : "Find Match!"}
         </button>
+        {/* {findMatchPopUp(isOpen, isFindingMatch, roomNum)} */}
         <button
           onClick={() => {
             setMatchFound(true);
@@ -227,19 +313,19 @@ export default function Dashboard() {
         >
           found match trigger (temporary)
         </button>
-        {findMatchPopUp(isOpen, isMatching, roomNum)}
-        <FoundMatchModal
+
+        <FindingMatchModal
+          isOpen={isOpen}
+          roomNum={roomNum}
+          isFindingMatch={isFindingMatch}
+          setIsFindingMatch={setIsFindingMatch}
+          timeLeft={timeLeft}
+          setTimeLeft={setTimeLeft}
           matchFound={matchFound}
           setMatchFound={setMatchFound}
           foundMatchCountdown={foundMatchCountdown}
           setFoundMatchCountdown={setFoundMatchCountdown}
           setIsInMatch={setIsInMatch}
-        />
-        <FindingMatchModal
-          isFindingMatch={isFindingMatch}
-          setIsFindingMatch={setIsFindingMatch}
-          timeLeft={timeLeft}
-          setTimeLeft={setTimeLeft}
         />
       </main>
     </>
