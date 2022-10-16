@@ -21,6 +21,7 @@ specifiers:
   react-dom: 18.2.0
   react-hook-form: ^7.36.1
   react-spinners: ^0.13.6
+  react-timer-hook: ^3.0.5
   socket.io: ^4.5.3
   socket.io-client: ^4.5.3
   spinners-react: ^1.0.7
@@ -43,6 +44,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.36.1_react@18.2.0
   react-spinners: 0.13.6_biqbaboplfbrettd7655fr4n2y
+  react-timer-hook: 3.0.5_biqbaboplfbrettd7655fr4n2y
   socket.io: 4.5.3
   socket.io-client: 4.5.3
   spinners-react: 1.0.7_5uumaiclxbdbzaqafclbf6maf4
@@ -2172,6 +2174,16 @@ packages:
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-timer-hook/3.0.5_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-n+98SdmYvui2ne3KyWb3Ldu4k0NYQa3g/VzW6VEIfZJ8GAk/jJsIY700M8Nd2vNSTj05c7wKyQfJBqZ0x7zfiA==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0

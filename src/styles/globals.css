@@ -45,4 +45,7 @@
     .switch {
         @apply text-green-500 transition-colors bg-gray-100 rounded-sm dark:bg-green-200 dark:text-green-200 ring-1 ring-gray-200 dark:ring-gray-800 focus:ring-0 focus:outline-none focus:ring-offset-0;
     }
+    .btn-leave-room {
+        @apply flex items-center gap-2 px-4 py-1 font-bold hover:text-light-100 hover:dark:text-dark-100 hover:bg-red-400 outline outline-red-400 rounded text-red-400
+    }
 }
