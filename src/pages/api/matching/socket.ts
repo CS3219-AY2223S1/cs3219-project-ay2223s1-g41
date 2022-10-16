@@ -50,8 +50,13 @@ export default function SocketHandler(req: any, res: any) {
                     io.to([user1,user2]).emit("assign-room", randomRoom);
                 }
             }
-            socket.on("send-message", message => {
-                socket.broadcast.emit("receive message", message);
+
+            socket.on("collab-edit", (room, message) => {
+                socket.to(room).emit("receive-collab-edit", message);
+            })
+
+            socket.on("join-room", room => {
+                socket.join(room);
             })
 
         })

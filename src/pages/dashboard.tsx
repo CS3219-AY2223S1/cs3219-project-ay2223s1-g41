@@ -3,6 +3,7 @@ import Head from "next/head";
 import React, { Dispatch, SetStateAction, useState, Fragment } from "react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import io from "socket.io-client";
+import router from "next/router";
 
 const difficulty = [
   { id: 1, difficulty: "Easy" },
@@ -112,6 +113,7 @@ export default function Dashboard() {
     await fetch("/api/matching/socket");
 
     socket = io();
+    console.log(socket)
     // on connection
     socket.on('connect', () => {
       console.log('connected');
@@ -122,26 +124,11 @@ export default function Dashboard() {
       setIsMatching(false);
       setRoomNum(room);
       console.log('Joined room '+ room);
+      setTimeout(()=>{
+        router.replace("/coderoom/" + room).then((r) => r);
+      }, 3000)
     })
-    
-    socket.on("newIncomingMessage", (msg:any) => {
-      // setMessages((currentMsg) => [
-      //   ...currentMsg,
-      //   { author: msg.author, message: msg.message },
-      // ]);
-      // console.log(messages);
-    });
   };
-  
-  const sendMessage = async () => {
-    // socket.emit("createdMessage", { author: chosenUsername, message });
-    // setMessages((currentMsg) => [
-    //   ...currentMsg,
-    //   { author: chosenUsername, message },
-    // ]);
-    // setMessage("");
-  };
-
 
   return (
     <>
@@ -164,7 +151,7 @@ export default function Dashboard() {
         >
           Find match!
         </button>
-        {findMatchPopUp(isOpen, isMatching,roomNum)}
+        {findMatchPopUp(isOpen, isMatching, roomNum)}
       </main>
     </>
   );
