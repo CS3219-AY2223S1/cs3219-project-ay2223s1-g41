@@ -19,7 +19,6 @@ export default function FoundMatchModal({
       foundMatchCountdown > -1 &&
         setTimeout(() => setFoundMatchCountdown(foundMatchCountdown - 1), 1000);
     }, [foundMatchCountdown]);
-    console.log("foundMatchModal");
     if (foundMatchCountdown == -1) {
       return <></>;
     }

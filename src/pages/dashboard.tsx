@@ -88,19 +88,19 @@ const DifficultyButton = ({
   );
 };
 
-
-const findMatchPopUp = (isOpen:Boolean, isMatching:Boolean , roomNum:String) => {
-  if (isOpen){
-    return(isMatching
-      ? <div>
-        Finding matching...
-        </div>
-      :
-      <div>
-        Found {roomNum}
-      </div>)
+const findMatchPopUp = (
+  isOpen: Boolean,
+  isMatching: Boolean,
+  roomNum: String
+) => {
+  if (isOpen) {
+    return isMatching ? (
+      <div>Finding matching...</div>
+    ) : (
+      <div>Found {roomNum}</div>
+    );
   } else {
-    return (<></>)
+    return <></>;
   }
 };
 
@@ -185,35 +185,35 @@ const FindingMatchModal = ({
   }
 };
 
-const findMatchPopUp = (
-  isOpen: Boolean,
-  isFindingMatch: Boolean,
-  roomNum: String
-) => {
-  if (isOpen) {
-    return isFindingMatch ? (
-      <div>Finding matching...</div>
-    ) : (
-      <div>Found {roomNum}</div>
-    );
-  } else {
-    return <></>;
-  }
-};
+// const findMatchPopUp = (
+//   isOpen: Boolean,
+//   isFindingMatch: Boolean,
+//   roomNum: String
+// ) => {
+//   if (isOpen) {
+//     return isFindingMatch ? (
+//       <div>Finding matching...</div>
+//     ) : (
+//       <div>Found {roomNum}</div>
+//     );
+//   } else {
+//     return <></>;
+//   }
+// };
 
 export default function Dashboard() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     Array<{ id: number; difficulty: string }>
   >([]);
-  const [isOpen, setIsOpen] = useState<Boolean>(false);
-  const [isMatching, setIsMatching] = useState<Boolean>(true);
-  const [roomNum, setRoomNum] = useState<String>("");
-  let socket:any;
+  // const [isOpen, setIsOpen] = useState<Boolean>(false);
+  // const [isMatching, setIsMatching] = useState<Boolean>(true);
+  // const [roomNum, setRoomNum] = useState<String>("");
+  // let socket:any;
 
-  function openModal() {
-    setIsOpen(true);
-    socketInitializer();
-  }
+  // function openModal() {
+  //   setIsOpen(true);
+  //   socketInitializer();
+  // }
 
   const [matchFound, setMatchFound] = useState<boolean>(true);
   const [foundMatchCountdown, setFoundMatchCountdown] = useState<number>(0);
@@ -257,27 +257,27 @@ export default function Dashboard() {
     });
   };
 
-  const socketInitializer = async () => {
-    // Call default io
-    await fetch("/api/matching/socket");
+  // const socketInitializer = async () => {
+  //   // Call default io
+  //   await fetch("/api/matching/socket");
 
-    socket = io();
-    console.log(socket)
-    // on connection
-    socket.on('connect', () => {
-      console.log('connected');
-      console.log(socket.id);
-    })
-    // matched
-    socket.on('assign-room', (room: string) => {
-      setIsMatching(false);
-      setRoomNum(room);
-      console.log('Joined room '+ room);
-      setTimeout(()=>{
-        router.replace("/coderoom/" + room).then((r) => r);
-      }, 3000)
-    })
-  };
+  //   socket = io();
+  //   console.log(socket)
+  //   // on connection
+  //   socket.on('connect', () => {
+  //     console.log('connected');
+  //     console.log(socket.id);
+  //   })
+  //   // matched
+  //   socket.on('assign-room', (room: string) => {
+  //     setIsMatching(false);
+  //     setRoomNum(room);
+  //     console.log('Joined room '+ room);
+  //     setTimeout(()=>{
+  //       router.replace("/coderoom/" + room).then((r) => r);
+  //     }, 3000)
+  //   })
+  // };
 
   return (
     <>
