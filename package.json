@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "v1",
+    "@monaco-editor/react": "^4.4.6",
     "autoprefixer": "^10.4.12",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
@@ -22,6 +23,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.36.1",
+    "react-spinners": "^0.13.6",
     "socket.io": "^4.5.3",
     "socket.io-client": "^4.5.3",
     "spinners-react": "^1.0.7",

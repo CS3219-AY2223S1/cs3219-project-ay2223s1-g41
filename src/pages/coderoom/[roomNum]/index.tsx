@@ -1,13 +1,13 @@
+import Editor from '@monaco-editor/react';
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react';
+import { ClockLoader as Loader } from "react-spinners";
 
 import io from "socket.io-client";
 
-const ip = require("ip");
 let socket:any;
 
 const Profile = () => {
-    const [currentMsg, setCurrentMsg] = useState<String>("");
     const [input, setInput] = useState('')
     const router = useRouter()
     const { roomNum } = router.query
@@ -25,20 +25,21 @@ const Profile = () => {
         })
     };
 
-    const onChangeHandler = (e:any) => {
-        setInput(e.target.value)
-        
+    function onChangeHandler(value:any, event:any){
+        setInput(value)
         console.log(socket);
-        console.log(roomNum, e.target.value);
-
-        socket.emit('collab-edit',roomNum, e.target.value)
+        console.log(roomNum, value);
+        socket.emit('collab-edit',roomNum, value)
     }
 
     return (
         <div>
             <p>RoomNum: {roomNum}</p>
-            <input
-                placeholder="Type something"
+            <Editor
+                height="600px" // By default, it fully fits with its parent
+                theme="vs-dark"
+                language="python"
+                loading={<Loader />}
                 value={input}
                 onChange={onChangeHandler}
             />
