@@ -86,6 +86,22 @@ const DifficultyButton = ({
   );
 };
 
+
+const findMatchPopUp = (isOpen:Boolean, isMatching:Boolean , roomNum:String) => {
+  if (isOpen){
+    return(isMatching
+      ? <div>
+        Finding matching...
+        </div>
+      :
+      <div>
+        Found {roomNum}
+      </div>)
+  } else {
+    return (<></>)
+  }
+};
+
 const FindingMatchModal = ({
   isFindingMatch,
   setIsFindingMatch,
@@ -141,12 +157,43 @@ export default function Dashboard() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     Array<{ id: number; difficulty: string }>
   >([]);
+  const [isOpen, setIsOpen] = useState<Boolean>(false);
+  const [isMatching, setIsMatching] = useState<Boolean>(true);
+  const [roomNum, setRoomNum] = useState<String>("");
+  let socket:any;
+
+  function openModal() {
+    setIsOpen(true);
+    socketInitializer();
+  }
 
   const [matchFound, setMatchFound] = useState<boolean>(true);
   const [foundMatchCountdown, setFoundMatchCountdown] = useState<number>(0);
   const [isInMatch, setIsInMatch] = useState<boolean>(false);
   const [isFindingMatch, setIsFindingMatch] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+
+  const socketInitializer = async () => {
+    // Call default io
+    await fetch("/api/matching/socket");
+
+    socket = io();
+    console.log(socket)
+    // on connection
+    socket.on('connect', () => {
+      console.log('connected');
+      console.log(socket.id);
+    })
+    // matched
+    socket.on('assign-room', (room: string) => {
+      setIsMatching(false);
+      setRoomNum(room);
+      console.log('Joined room '+ room);
+      setTimeout(()=>{
+        router.replace("/coderoom/" + room).then((r) => r);
+      }, 3000)
+    })
+  };
 
   return (
     <>
@@ -180,6 +227,7 @@ export default function Dashboard() {
         >
           found match trigger (temporary)
         </button>
+        {findMatchPopUp(isOpen, isMatching, roomNum)}
         <FoundMatchModal
           matchFound={matchFound}
           setMatchFound={setMatchFound}
