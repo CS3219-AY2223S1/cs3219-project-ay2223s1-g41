@@ -4,31 +4,31 @@
 
 @layer base {
     body {
-        @apply min-h-screen text-sm bg-green-100 dark:bg-green-800;
+        @apply min-h-screen text-sm bg-light-100 dark:bg-dark-100;
     }
     h1 {
-        @apply text-3xl font-bold text-green-900 dark:text-green-100;
+        @apply text-3xl font-bold text-dark-200 dark:text-light-100;
     }
     h2 {
-        @apply font-bold text-green-900 dark:text-green-100;
+        @apply font-bold text-dark-200 dark:text-light-100;
     }
     label {
-        @apply font-bold text-green-900 dark:text-green-100;
+        @apply font-bold text-dark-200 dark:text-light-100;
     }
     input {
-        @apply p-2 text-green-900 transition bg-green-700 border-none rounded dark:text-green-100 dark:bg-green-900 focus:ring-1 focus:outline-none focus:ring-green-800;
+        @apply p-2 text-dark-200 transition border-none rounded  dark:bg-light-100 focus:ring-1 focus:outline-none focus:ring-green-200 dark:focus:ring-green-500;
     }
     input[type='email'] {
-        @apply p-2 text-green-900 transition bg-green-700 border-none rounded dark:text-green-100 dark:bg-green-900 focus:ring-1 focus:outline-none focus:ring-green-800;
+        @apply p-2 text-dark-200 transition  border-none rounded  dark:bg-light-100 focus:ring-1 focus:outline-none focus:ring-green-200 dark:focus:ring-green-500
     }
     input[type='password'] {
-        @apply p-2 text-green-900 transition bg-green-700 border-none rounded dark:text-green-100 dark:bg-green-900 focus:ring-1 focus:outline-none focus:ring-green-800;
+        @apply p-2 text-dark-200 transition  border-none rounded  dark:bg-light-100 focus:ring-1 focus:outline-none focus:ring-green-200 dark:focus:ring-green-500
     }
     p {
-        @apply text-green-900 dark:text-green-100;
+        @apply text-dark-200 dark:text-green-100;
     }
     dt {
-        @apply font-bold text-green-900 dark:text-green-100;
+        @apply font-bold text-dark-200 dark:text-green-100;
     }
 }
 
@@ -37,12 +37,15 @@
         @apply text-red-500 dark:text-red-400;
     }
     .btn-primary {
-        @apply flex items-center gap-2 px-4 py-2 font-bold text-green-100 bg-green-500 dark:bg-green-900 rounded hover:bg-opacity-70;
+        @apply flex items-center gap-2 px-4 py-2 font-bold text-green-100 dark:text-dark-100 bg-dark-100 dark:bg-green-200 rounded hover:bg-opacity-70;
     }
     .btn-secondary {
-        @apply flex items-center gap-2 px-4 py-2 font-bold text-green-100 bg-green-500 rounded dark:text-green-900 dark:bg-green-100 hover:bg-opacity-70;
+        @apply flex items-center gap-2 px-4 py-2 font-bold text-green-100 bg-dark-100 dark:bg-green-200 rounded dark:text-green-900  hover:bg-opacity-70;
     }
     .switch {
-        @apply text-green-500 transition-colors bg-gray-100 rounded-sm dark:bg-green-800 dark:text-green-400 ring-1 ring-gray-200 dark:ring-gray-800 focus:ring-0 focus:outline-none focus:ring-offset-0;
+        @apply text-green-500 transition-colors bg-gray-100 rounded-sm dark:bg-green-200 dark:text-green-200 ring-1 ring-gray-200 dark:ring-gray-800 focus:ring-0 focus:outline-none focus:ring-offset-0;
+    }
+    .btn-leave-room {
+        @apply flex items-center gap-2 px-4 py-1 font-bold hover:text-light-100 hover:dark:text-dark-100 hover:bg-red-400 outline outline-red-400 rounded text-red-400
     }
 }
