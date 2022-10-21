@@ -1,5 +1,7 @@
-import { useState } from "react";
+import router from "next/router";
+import { useContext } from "react";
 import { useStopwatch } from "react-timer-hook";
+import { RoomContext } from "../../pages/coderoom/[roomNum]";
 
 const Digit = ({ value }: { value: number }) => {
     const leftDigit = value >= 10 ? value.toString()[0] : "0";
@@ -34,7 +36,9 @@ const Timer = () => {
     );
 };
 
-export default function StatusBar({ roomNum }: { roomNum: string | string[] }) {
+export default function StatusBar() {
+    const { socket, roomNum, session } = { ...useContext(RoomContext) };
+
     return (
         <header className="sticky top-20 z-30 flex justify-between items-center w-full p-4 bg-white dark:bg-dark-100 shadow-lg">
             <div className="flex items-center gap-2 px-4 py-1 font-bold outline outline-green-200 bg-green-200 rounded text-dark-100">
@@ -43,7 +47,13 @@ export default function StatusBar({ roomNum }: { roomNum: string | string[] }) {
 
             <Timer />
 
-            <button className="btn-leave-room">
+            <button
+                className="btn-leave-room"
+                onClick={() => {
+                    //socket.disconnect();
+                    router.replace("/dashboard").then((r) => r);
+                }}
+            >
                 Leave room
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                     <path

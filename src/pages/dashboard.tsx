@@ -1,217 +1,188 @@
-import { Listbox, Transition, Dialog } from "@headlessui/react";
 import Head from "next/head";
-import React, { Dispatch, SetStateAction, useState, Fragment, useEffect } from "react";
-import { CheckIcon, ChevronDownIcon, XIcon } from "@heroicons/react/solid";
+import React, { useState, useEffect, useRef } from "react";
 import FoundMatchModal from "../components/FoundMatchModal";
-import io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import router from "next/router";
 import SelectDifficultyListbox from "../components/SelectDifficultyListbox";
-
-const findMatchPopUp = (isOpen: Boolean, isMatching: Boolean, roomNum: String) => {
-    if (isOpen) {
-        return isMatching ? <div>Finding matching...</div> : <div>Found {roomNum}</div>;
-    } else {
-        return <></>;
-    }
-};
-
-const FindingMatchModal = ({
-    //isOpen,
-    roomNum,
-    isFindingMatch,
-    setIsFindingMatch,
-    timeLeft,
-    setTimeLeft,
-    matchFound,
-    setMatchFound,
-    foundMatchCountdown,
-    setFoundMatchCountdown,
-    setIsInMatch,
-}: {
-    //isOpen: Boolean;
-    roomNum: String;
-    isFindingMatch: boolean;
-    setIsFindingMatch: Dispatch<boolean>;
-    timeLeft: number;
-    setTimeLeft: Dispatch<number>;
-    matchFound: boolean;
-    setMatchFound: Dispatch<boolean>;
-    foundMatchCountdown: number;
-    setFoundMatchCountdown: Dispatch<number>;
-    setIsInMatch: Dispatch<boolean>;
-}) => {
-    if (isFindingMatch) {
-        useEffect(() => {
-            timeLeft > -3 && setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-        }, [timeLeft]);
-        if (timeLeft == -3) {
-            setIsFindingMatch(false);
-            return <></>;
-        }
-        if (timeLeft <= 0) {
-            return (
-                <div className="flex flex-row items-center justify-center fixed bottom-5 bg-white h-25 w-1/2 rounded-lg">
-                    <p className="text-2xl font-bold text-red-800 text-center">Unable to find match! Please try again later.</p>
-                </div>
-            );
-        }
-
-        return (
-            <div className="flex flex-row items-center fixed bottom-5 bg-white h-25 w-1/2 rounded-lg">
-                <div className="flex border-r border-r-gray h-5/6 w-1/6 justify-center items-center">
-                    <p className="text-2xl font-bold text-green-800 text-center">{timeLeft.toString()}</p>
-                </div>
-                <div className="flex justify-center items-center w-full">
-                    <p className="flex text-2xl font-bold text-green-800 text-center justify-center items-center">Finding match...</p>
-                </div>
-                <button className="pr-5" onClick={() => setIsFindingMatch(false)}>
-                    <XIcon className="w-5 h-5 text-red-800" aria-hidden="true" />
-                </button>
-            </div>
-        );
-    } else {
-        if (timeLeft < 0) {
-            return <></>;
-        } else {
-            return (
-                <FoundMatchModal
-                    matchFound={matchFound}
-                    setMatchFound={setMatchFound}
-                    foundMatchCountdown={foundMatchCountdown}
-                    setFoundMatchCountdown={setFoundMatchCountdown}
-                    setIsInMatch={setIsInMatch}
-                />
-            );
-        }
-    }
-};
-
-// const findMatchPopUp = (
-//   isOpen: Boolean,
-//   isFindingMatch: Boolean,
-//   roomNum: String
-// ) => {
-//   if (isOpen) {
-//     return isFindingMatch ? (
-//       <div>Finding matching...</div>
-//     ) : (
-//       <div>Found {roomNum}</div>
-//     );
-//   } else {
-//     return <></>;
-//   }
-// };
+import FindingMatchModal from "../components/dashboard/FindingMatchModal";
 
 export default function Dashboard() {
+    //let socket: Socket;
+
     const [selectedDifficulty, setSelectedDifficulty] = useState<Array<{ id: number; difficulty: string }>>([]);
-    // const [isOpen, setIsOpen] = useState<Boolean>(false);
-    // const [isMatching, setIsMatching] = useState<Boolean>(true);
-    // const [roomNum, setRoomNum] = useState<String>("");
-    // let socket:any;
 
-    // function openModal() {
-    //   setIsOpen(true);
-    //   socketInitializer();
-    // }
-
-    const [matchFound, setMatchFound] = useState<boolean>(true);
-    const [foundMatchCountdown, setFoundMatchCountdown] = useState<number>(0);
+    const [isMatchFound, setIsMatchFound] = useState<boolean>(false);
+    //const [foundMatchCountdown, setFoundMatchCountdown] = useState<number>(0);
     const [isInMatch, setIsInMatch] = useState<boolean>(false);
     const [isFindingMatch, setIsFindingMatch] = useState<boolean>(false);
-    const [timeLeft, setTimeLeft] = useState<number>(0);
-    const [isOpen, setIsOpen] = useState<Boolean>(false);
-    const [roomNum, setRoomNum] = useState<String>("");
-    let socket: any;
 
-    function openModal() {
-        setIsOpen(true);
-        socketInitializer();
-    }
+    const [isMatchProcessed, setIsMatchProcessed] = useState<boolean>(false);
 
-    const socketInitializer = async () => {
-        // Call default io
-        await fetch("/api/matching/socket");
+    const [socket, setSocket] = useState<Socket | null>(null);
 
-        socket = io();
-        console.log(socket);
+    const isMounted = useRef(false);
+
+    useEffect(() => {
+        if (isMounted.current && isFindingMatch) {
+            console.log("mounted");
+            // if (socket === null) {
+            //     fetch("/api/matching/socket").then(() => {
+            //         const localSocket = io();
+            //         setSocket(localSocket);
+            //         socketInitializer(localSocket);
+            //     });
+            // } else {
+            //     socketInitializer(socket);
+            // }
+            fetch("/api/matching/socket").then(() => {
+                const localSocket = io();
+                setSocket(localSocket);
+                socketInitializer(localSocket);
+            });
+        } else {
+            isMounted.current = true;
+        }
+        if (isMatchProcessed) {
+            return () => {
+                //isMounted.current = false;
+                socket?.disconnect();
+                console.log("clean up and unmount");
+            };
+        }
+    }, [isFindingMatch]);
+
+    // const socketInitializer = async () => {
+    //     // Call default io
+    //     console.table({ isAccepted, isDeclined });
+    //     await fetch("/api/matching/socket");
+
+    //     socket = io();
+
+    //     // on connection
+    //     socket.on("connect", () => {
+    //         console.log("connected");
+    //         console.log(socket.id);
+    //     });
+
+    //     socket.on("match-found", () => {
+    //         //setIsFindingMatch(false);
+    //         setIsMatchFound(true);
+    //         setFoundMatchCountdown(10);
+    //     });
+
+    //     if (isDeclined) {
+    //         console.log("declined");
+    //         setIsMatchProcessed(true);
+    //         //socket.emit("decline", socket.id);
+    //     }
+
+    //     // matched
+    //     if (isAccepted) {
+    //         console.log("accepted");
+
+    //         // socket.emit("accept");
+
+    //         // socket.on("other-declined", () => {
+    //         //     alert("The other user has declined");
+    //         // });
+
+    //         // socket.on("assign-room", (room: string) => {
+    //         //     // setIsFindingMatch(false);
+    //         //     // setIsMatchFound(true);
+    //         //     // setFoundMatchCountdown(10);
+    //         //     if (isInMatch) {
+    //         //         console.log(isInMatch);
+    //         //         console.log("here");
+    //         //         setRoomNum(room);
+    //         //         console.log("Joined room " + room);
+    //         //         setTimeout(() => {
+    //         //             router.replace("/coderoom/" + room).then((r) => r);
+    //         //         }, 3000);
+    //         //     }
+    //         // });
+    //     }
+    // };
+
+    const socketInitializer = async (socket: Socket) => {
         // on connection
-        socket.on("connect", () => {
+        socket!.on("connect", () => {
             console.log("connected");
             console.log(socket.id);
         });
-        // matched
-        socket.on("assign-room", (room: string) => {
+
+        socket!.on("match-found", () => {
+            //setIsFindingMatch(false);
+            setIsMatchFound(true);
+            //setFoundMatchCountdown(10);
+        });
+
+        socket!.on("other-declined", () => {
+            alert("The other user has declined");
+            //socket?.disconnect();
+            //setSocket(null);
+            setIsMatchFound(false);
             setIsFindingMatch(false);
-            setMatchFound(true);
-            setFoundMatchCountdown(10);
-            if (isInMatch) {
-                console.log(isInMatch);
-                console.log("here");
-                setRoomNum(room);
-                console.log("Joined room " + room);
-                setTimeout(() => {
-                    router.replace("/coderoom/" + room).then((r) => r);
-                }, 3000);
-            }
+            setIsMatchProcessed(true);
+            //return;
+        });
+
+        socket!.on("assign-room", (room) => {
+            setIsInMatch(true);
+            setIsFindingMatch(false);
+            setIsMatchFound(true);
+            //setFoundMatchCountdown(10);
+            //if (isInMatch) {
+            setIsMatchProcessed(true);
+            console.log("Joined room " + room);
+            router.replace("/coderoom/" + room).then((r) => r);
         });
     };
-
-    // const socketInitializer = async () => {
-    //   // Call default io
-    //   await fetch("/api/matching/socket");
-
-    //   socket = io();
-    //   console.log(socket)
-    //   // on connection
-    //   socket.on('connect', () => {
-    //     console.log('connected');
-    //     console.log(socket.id);
-    //   })
-    //   // matched
-    //   socket.on('assign-room', (room: string) => {
-    //     setIsMatching(false);
-    //     setRoomNum(room);
-    //     console.log('Joined room '+ room);
-    //     setTimeout(()=>{
-    //       router.replace("/coderoom/" + room).then((r) => r);
-    //     }, 3000)
-    //   })
-    // };
 
     return (
         <>
             <Head>
-                <title>Dashboard</title>
+                <title>PeerPrep | Dashboard</title>
             </Head>
-            <main className="flex flex-col items-center min-h-screen gap-6">
-                <text className="text-2xl font-bold text-green-800 dark:text-white">Welcome to PeerPrep!</text>
+            <main className="flex flex-col gap-6 min-h-screen justify-center items-center">
+                <div className="flex flex-col p-10">
+                    <div className="text-2xl font-bold text-dark-100 dark:text-light-100 text-center py-10">Welcome to PeerPrep!</div>
 
-                <SelectDifficultyListbox selectedDifficulty={selectedDifficulty} setSelectedDifficulty={setSelectedDifficulty} />
-                <button
-                    disabled={selectedDifficulty.length == 0 || isFindingMatch}
-                    className="relative bg-green-700 color-white rounded-md px-4 py-3 text-green-900 font-bold hover:shadow-md disabled:opacity-50 disabled:shadow-none"
-                    onClick={() => {
-                        setIsFindingMatch(true);
-                        setTimeLeft(10);
-                        openModal();
-                    }}
-                >
-                    {isFindingMatch ? "Finding..." : "Find Match!"}
-                </button>
-                {/* {findMatchPopUp(isOpen, isFindingMatch, roomNum)} */}
+                    <div className="flex justify-center items-center gap-4">
+                        <SelectDifficultyListbox selectedDifficulty={selectedDifficulty} setSelectedDifficulty={setSelectedDifficulty} />
+                        <button
+                            disabled={selectedDifficulty.length == 0 || isFindingMatch}
+                            className="bg-green-700 color-white rounded-md p-2 text-green-900 font-bold hover:shadow-md disabled:opacity-50 disabled:shadow-none"
+                            onClick={() => {
+                                setIsFindingMatch(true);
+                            }}
+                        >
+                            {isFindingMatch ? "Finding..." : "Find Match!"}
+                        </button>
+                        {isFindingMatch && (
+                            <button
+                                className="bg-red-400 color-white rounded-md p-2 text-green-900 font-bold hover:opacity-70 disabled:opacity-50 disabled:shadow-none"
+                                onClick={() => {
+                                    setIsFindingMatch(false);
+                                    socket?.disconnect();
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                    </div>
+                </div>
 
-                {isOpen && (
-                    <FindingMatchModal
-                        roomNum={roomNum}
-                        isFindingMatch={isFindingMatch}
+                {/* isStartToFindMatch and isMatchFound should always be opposite of each other */}
+
+                {isFindingMatch && !isMatchFound && <FindingMatchModal setIsFindingMatch={setIsFindingMatch} />}
+
+                {isMatchFound && !isMatchProcessed && (
+                    <FoundMatchModal
+                        isMatchFound={isMatchFound}
+                        setIsMatchFound={setIsMatchFound}
                         setIsFindingMatch={setIsFindingMatch}
-                        timeLeft={timeLeft}
-                        setTimeLeft={setTimeLeft}
-                        matchFound={matchFound}
-                        setMatchFound={setMatchFound}
-                        foundMatchCountdown={foundMatchCountdown}
-                        setFoundMatchCountdown={setFoundMatchCountdown}
-                        setIsInMatch={setIsInMatch}
+                        setIsMatchProcessed={setIsMatchProcessed}
+                        socket={socket}
                     />
                 )}
             </main>

@@ -17,10 +17,12 @@ const Home: NextPage = () => {
         return <></>;
     };
 
+    const title = `PeerPrep | ${status == "loading" ? "Loading..." : "Dashboard"}`;
+
     return (
         <>
             <Head>
-                <title>PeerPrep | {status == "loading" ? "Loading..." : "Dashboard"}</title>
+                <title>{title}</title>
             </Head>
             <main className="flex flex-col justify-center h-screen gap-6">
                 {status == "loading" ? (
