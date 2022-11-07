@@ -5,9 +5,17 @@ import { io, Socket } from "socket.io-client";
 import router from "next/router";
 import SelectDifficultyListbox from "../components/SelectDifficultyListbox";
 import FindingMatchModal from "../components/dashboard/FindingMatchModal";
+import { useSession } from "next-auth/react";
 
 export default function Dashboard() {
     //let socket: Socket;
+
+    const { status } = useSession({
+        required: true,
+        onUnauthenticated() {
+            router.replace("/log-in").then((r) => r);
+        },
+    });
 
     const [selectedDifficulty, setSelectedDifficulty] = useState<Array<{ id: number; difficulty: string }>>([]);
 
