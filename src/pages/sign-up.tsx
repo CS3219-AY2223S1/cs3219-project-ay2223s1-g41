@@ -3,6 +3,8 @@ import { NextPage } from "next";
 import router from "next/router";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import axios from "axios";
+import { signIn } from "next-auth/react";
 
 type FormValues = {
     email: string;
@@ -26,12 +28,14 @@ const SignUp: NextPage = () => {
             setSignUpError("Invalid email");
         } else {
             try {
-                const axios = require("axios").default;
-                const res = await axios.post("/api/auth/sign-up", {
-                    email,
-                    password,
-                });
-                await router.replace("/dashboard");
+                await axios
+                    .post("/api/auth/sign-up", {
+                        email,
+                        password,
+                    })
+                    .then(() => {
+                        router.replace("/dashboard");
+                    });
             } catch (error: any) {
                 setSignUpError(JSON.stringify(error, null, 2));
             }

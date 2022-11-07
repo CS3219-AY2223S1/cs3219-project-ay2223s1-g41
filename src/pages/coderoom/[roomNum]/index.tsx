@@ -41,11 +41,9 @@ const Room = () => {
         // Call default io
         await fetch("/api/matching/socket");
         socket = io();
-        //console.log(roomNum);
         socket.emit("join-room", roomNum);
 
         socket.on("receive-collab-edit", (message: any) => {
-            //console.log(message);
             setInput(message);
         });
 
@@ -56,8 +54,6 @@ const Room = () => {
 
     function onChangeHandler(value: any, event: any) {
         setInput(value);
-        //console.log(socket);
-        //console.log(roomNum, value);
         socket.emit("collab-edit", roomNum, value);
     }
 
@@ -70,7 +66,7 @@ const Room = () => {
                 <div className="p-2">
                     <div className="grid grid-cols-5 gap-2 pt-20">
                         <Question />
-                        <div className="col-span-3 dark:bg-dark-100 bg-white p-4 rounded-lg container">
+                        <div className="col-span-3 dark:bg-dark-100 bg-white p-4 rounded-lg container h-full">
                             <div className="flex gap-6 items-center">
                                 <div className="flex gap-1 items-center">
                                     <p>Change language:</p>

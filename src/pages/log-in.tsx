@@ -65,11 +65,6 @@ const LogIn: NextPage = () => {
                             <div className="flex flex-col gap-2">
                                 <div className="flex justify-between gap-4">
                                     <label htmlFor="password">Password</label>
-                                    {/*<Link href="/forgot-password">*/}
-                                    {/*    <a className="font-bold text-blue-500">*/}
-                                    {/*        Forgot Password?*/}
-                                    {/*    </a>*/}
-                                    {/*</Link>*/}
                                 </div>
                                 <input
                                     type="password"

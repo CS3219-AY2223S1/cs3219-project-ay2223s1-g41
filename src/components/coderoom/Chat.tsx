@@ -6,6 +6,7 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
     const [message, setMessage] = useState<string>("");
     const { socket, roomNum, session } = { ...useContext(RoomContext) };
 
+    console.log(message);
     const handleSubmit = () => {
         message &&
             socket.emit(
@@ -50,7 +51,7 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
     }, [textareaElement, handleSubmit]);
 
     return (
-        <div className="col-span-1 dark:bg-dark-100 bg-white rounded-lg flex flex-col justify-between ">
+        <div className="col-span-1 dark:bg-dark-100 bg-white rounded-lg flex flex-col justify-between">
             <div className={`p-2 h-[545px] overflow-auto overflow-x-auto justify-between flex flex-col`}>
                 <div className="font-bold text-xl">Chat</div>
                 <div className="flex flex-col justify-center items-center"></div>
@@ -73,13 +74,6 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
                         },
                     }}
                 />
-                {/* <ChatBubble messages={new Message({ id: 1, senderName: "me", message: "hi" })} /> */}
-
-                {/* {chats.map((chat, index) => (
-                    <div key={index}>
-                        {chat.senderName}: {chat.message}
-                    </div>
-                ))} */}
             </div>
             <div className="h-0.5 mb-2 f-full dark:bg-dark-200 bg-light-100" />
 
@@ -89,9 +83,7 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
                     placeholder="Type a message..."
                     value={message}
                     onChange={(event) => {
-                        if (event.target.value !== "") {
-                            setMessage(event.target.value);
-                        }
+                        setMessage(event.target.value);
                     }}
                     className="w-full break-words break-all h-40 dark:bg-dark-100 bg-white resize-none p-2 dark:text-light-100 text-dark-200 focus:outline-none"
                 />
