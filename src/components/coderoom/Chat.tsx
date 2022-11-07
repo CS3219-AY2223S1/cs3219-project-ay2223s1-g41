@@ -6,7 +6,6 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
     const [message, setMessage] = useState<string>("");
     const { socket, roomNum, session } = { ...useContext(RoomContext) };
 
-    console.log(message);
     const handleSubmit = () => {
         message &&
             socket.emit(
