@@ -20,94 +20,32 @@ export default function Dashboard() {
 
     const [socket, setSocket] = useState<Socket | null>(null);
 
-    const isMounted = useRef(false);
-
     useEffect(() => {
-        if (isMounted.current && isFindingMatch) {
+        if (isFindingMatch) {
             console.log("mounted");
-            // if (socket === null) {
-            //     fetch("/api/matching/socket").then(() => {
-            //         const localSocket = io();
-            //         setSocket(localSocket);
-            //         socketInitializer(localSocket);
-            //     });
-            // } else {
-            //     socketInitializer(socket);
-            // }
             fetch("/api/matching/socket").then(() => {
                 const localSocket = io();
                 setSocket(localSocket);
                 socketInitializer(localSocket);
             });
-        } else {
-            isMounted.current = true;
         }
         if (isMatchProcessed) {
             return () => {
                 //isMounted.current = false;
                 socket?.disconnect();
                 console.log("clean up and unmount");
+                setIsMatchProcessed(false);
             };
         }
     }, [isFindingMatch]);
 
-    // const socketInitializer = async () => {
-    //     // Call default io
-    //     console.table({ isAccepted, isDeclined });
-    //     await fetch("/api/matching/socket");
-
-    //     socket = io();
-
-    //     // on connection
-    //     socket.on("connect", () => {
-    //         console.log("connected");
-    //         console.log(socket.id);
-    //     });
-
-    //     socket.on("match-found", () => {
-    //         //setIsFindingMatch(false);
-    //         setIsMatchFound(true);
-    //         setFoundMatchCountdown(10);
-    //     });
-
-    //     if (isDeclined) {
-    //         console.log("declined");
-    //         setIsMatchProcessed(true);
-    //         //socket.emit("decline", socket.id);
-    //     }
-
-    //     // matched
-    //     if (isAccepted) {
-    //         console.log("accepted");
-
-    //         // socket.emit("accept");
-
-    //         // socket.on("other-declined", () => {
-    //         //     alert("The other user has declined");
-    //         // });
-
-    //         // socket.on("assign-room", (room: string) => {
-    //         //     // setIsFindingMatch(false);
-    //         //     // setIsMatchFound(true);
-    //         //     // setFoundMatchCountdown(10);
-    //         //     if (isInMatch) {
-    //         //         console.log(isInMatch);
-    //         //         console.log("here");
-    //         //         setRoomNum(room);
-    //         //         console.log("Joined room " + room);
-    //         //         setTimeout(() => {
-    //         //             router.replace("/coderoom/" + room).then((r) => r);
-    //         //         }, 3000);
-    //         //     }
-    //         // });
-    //     }
-    // };
 
     const socketInitializer = async (socket: Socket) => {
         // on connection
         socket!.on("connect", () => {
             console.log("connected");
             console.log(socket.id);
+            socket?.emit('find-match', selectedDifficulty);
         });
 
         socket!.on("match-found", () => {
@@ -124,6 +62,7 @@ export default function Dashboard() {
             setIsFindingMatch(false);
             setIsMatchProcessed(true);
             //return;
+            socket.disconnect();
         });
 
         socket!.on("assign-room", (room) => {
@@ -163,6 +102,8 @@ export default function Dashboard() {
                                 className="bg-red-400 color-white rounded-md p-2 text-green-900 font-bold hover:opacity-70 disabled:opacity-50 disabled:shadow-none"
                                 onClick={() => {
                                     setIsFindingMatch(false);
+                                    socket?.emit("cancel-find-match", socket.id);
+                                    console.log("disconnect");
                                     socket?.disconnect();
                                 }}
                             >
@@ -174,7 +115,7 @@ export default function Dashboard() {
 
                 {/* isStartToFindMatch and isMatchFound should always be opposite of each other */}
 
-                {isFindingMatch && !isMatchFound && <FindingMatchModal setIsFindingMatch={setIsFindingMatch} />}
+                {isFindingMatch && !isMatchFound && <FindingMatchModal setIsFindingMatch={setIsFindingMatch} socket={socket}/>}
 
                 {isMatchFound && !isMatchProcessed && (
                     <FoundMatchModal
