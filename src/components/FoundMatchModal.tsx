@@ -95,6 +95,8 @@ export default function FoundMatchModal({
                                                     setIsDeclined(true);
                                                     setIsMatchFound(false);
                                                     setIsMatchProcessed(true);
+                                                    console.log("disconnect");
+                                                    socket.disconnect();
                                                 }}
                                             >
                                                 Decline

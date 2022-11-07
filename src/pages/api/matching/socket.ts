@@ -7,7 +7,10 @@ export default function SocketHandler(req: any, res: any) {
         return Math.floor(Math.pow(10, length - 1) + Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1));
     };
 
-    let stack: string[] = [];
+    let easyQ: (string | undefined)[] = [];
+    let mediumQ: (string | undefined)[] = [];
+    let hardQ: (string | undefined)[] = [];
+    
     let room: string[] = [];
     let accepts: string[] = [];
 
@@ -23,28 +26,122 @@ export default function SocketHandler(req: any, res: any) {
 
         io.on("connection", async (socket) => {
             console.log(socket.id + " is connected");
-            if (!stack.includes(socket.id)) {
-                stack.push(socket.id);
-            }
-            if (stack.length == 2) {
-                // already two user waiting in the server
-                user1 = stack.pop()!;
-                user2 = stack.pop()!;
-            }
-
             // notify both users that a match is found
-            if (user1 && user2) {
-                console.log("match-found");
-                console.table({ user1, user2 });
-                io.to([user1, user2]).emit("match-found");
-            }
+            socket.on("find-match", (selectedDifficulties) => {
+                console.log("start finding!!!");
+                let temp: string[] = [];
+                for (let index = 0; index < selectedDifficulties.length; index++) {
+                    temp.push(selectedDifficulties[index].difficulty);
+                }
+                
+                console.log(temp);
+                if (temp.includes("Easy")) {
+                    easyQ.push(socket.id);
+                }
+                if (temp.includes("Medium")) {
+                    mediumQ.push(socket.id);
+                }
+                if (temp.includes("Hard")) {
+                    hardQ.push(socket.id);
+                }
+                
+                // check if any one queue meet 2 ppl, remove the users from all queue
+                if (easyQ.length == 2) {
+                    user1 = easyQ.shift()!;
+                    user2 = easyQ.shift()!;
+                    if (mediumQ.includes(user1)){
+                        mediumQ.splice(mediumQ.indexOf(user1), 1);
+                    }
+                    if (mediumQ.includes(user2)){
+                        mediumQ.splice(mediumQ.indexOf(user2), 1);
+                    }
+                    if (hardQ.includes(user1)){
+                        hardQ.splice(hardQ.indexOf(user1), 1);
+                    }
+                    if (hardQ.includes(user2)){
+                        hardQ.splice(hardQ.indexOf(user2), 1);
+                    }
+                }
+
+                if (mediumQ.length == 2) {
+                    user1 = mediumQ.shift()!;
+                    user2 = mediumQ.shift()!;
+                    if (easyQ.includes(user1)){
+                        easyQ.splice(easyQ.indexOf(user1), 1);
+                    }
+                    if (easyQ.includes(user2)){
+                        easyQ.splice(easyQ.indexOf(user2), 1);
+                    }
+                    if (hardQ.includes(user1)){
+                        hardQ.splice(hardQ.indexOf(user1), 1);
+                    }
+                    if (hardQ.includes(user2)){
+                        hardQ.splice(hardQ.indexOf(user2), 1);
+                    }
+                }
+
+                if (hardQ.length == 2) {
+                    user1 = hardQ.shift()!;
+                    user2 = hardQ.shift()!;
+                    if (mediumQ.includes(user1)){
+                        mediumQ.splice(mediumQ.indexOf(user1), 1);
+                    }
+                    if (mediumQ.includes(user2)){
+                        mediumQ.splice(mediumQ.indexOf(user2), 1);
+                    }
+                    if (easyQ.includes(user1)){
+                        easyQ.splice(easyQ.indexOf(user1), 1);
+                    }
+                    if (easyQ.includes(user2)){
+                        easyQ.splice(easyQ.indexOf(user2), 1);
+                    }
+                }
+
+                if (user1 && user2) {
+                    console.log("match-found");
+                    console.table({ user1, user2 });
+                    io.to([user1, user2]).emit("match-found");
+                }
+            });
+
+            socket.on("cancel-find-match", (socketId) => {
+                console.log("should disconnect soon")
+                if (easyQ.includes(socket.id)) {
+                    easyQ.splice(easyQ.indexOf(socket.id));
+                }
+                if (mediumQ.includes(socket.id)) {
+                    mediumQ.splice(mediumQ.indexOf(socket.id));
+                }
+                if (hardQ.includes(socket.id)) {
+                    hardQ.splice(hardQ.indexOf(socket.id));
+                }
+            });
 
             socket.on("decline", (socketId) => {
                 console.log(socketId + " declined");
                 io.to(user1 === socketId ? user2! : user1!).emit("other-declined");
-                // user1 = undefined;
-                // user2 = undefined;
-                // accepts = [];
+                if (easyQ.includes(user1)) {
+                    easyQ.splice(easyQ.indexOf(user1));
+                }
+                if (mediumQ.includes(user1)) {
+                    mediumQ.splice(mediumQ.indexOf(user1));
+                }
+                if (hardQ.includes(user1)) {
+                    hardQ.splice(hardQ.indexOf(user1));
+                }
+
+                if (easyQ.includes(user2)) {
+                    easyQ.splice(easyQ.indexOf(user2));
+                }
+                if (mediumQ.includes(user2)) {
+                    mediumQ.splice(mediumQ.indexOf(user2));
+                }
+                if (hardQ.includes(user2)) {
+                    hardQ.splice(hardQ.indexOf(user2));
+                }
+                user1 = undefined;
+                user2 = undefined;
+                accepts = [];
             });
 
             //if (user1 && user2) {
