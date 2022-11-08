@@ -1,7 +1,18 @@
-export default function Question() {
-    return (
-        <div className="col-span-1 dark:bg-dark-100 bg-white p-4 rounded-lg">
-            <div className="font-bold text-xl">Question</div>
-        </div>
-    );
+export default function Question({
+  questionDescription,
+  questionName,
+  questionDifficulty,
+}: {
+  questionDescription: String;
+  questionName: String;
+  questionDifficulty: String;
+}) {
+  return (
+    <div>
+      <div className="font-bold text-xl">Question</div>
+      <p>Name: {questionName}</p>
+      <p>Difficulty: {questionDifficulty}</p>
+      <p>{questionDescription}</p>
+    </div>
+  );
 }
