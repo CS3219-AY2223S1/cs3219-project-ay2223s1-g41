@@ -19,42 +19,40 @@ export const RoomContext = createContext<
 >(undefined);
 
 const Room = () => {
-    const [input, setInput] = useState("");
-    const [message, setMessage] = useState<string>("");
-    const [chats, setChats] = useState<Message[]>([]);
-    
-    const [questionNumber, setQuestionNumber] = useState<Number>(0);
-    const [difficulty, setDifficulty] = useState("hard");
+  const [input, setInput] = useState("");
+  const [message, setMessage] = useState<string>("");
+  const [chats, setChats] = useState<Message[]>([]);
 
+  const [questionNumber, setQuestionNumber] = useState<Number>(0);
+  const [difficulty, setDifficulty] = useState<undefined | string>(undefined);
 
-
-    const [questionDescription, setQuestionDescription] = useState("");
-    const [questionName, setQuestionName] = useState("");
-    const [questionDifficulty, setQuestionDifficulty] = useState("");
-    const [questionExamples, setQuestionExamples] = useState<object[]>(
+  const [questionDescription, setQuestionDescription] = useState("");
+  const [questionName, setQuestionName] = useState("");
+  const [questionDifficulty, setQuestionDifficulty] = useState("");
+  const [questionExamples, setQuestionExamples] = useState<object[]>(
     Object(undefined)
   );
-    const [questionTests, setQuestionTests] = useState<object[]>(
+  const [questionTests, setQuestionTests] = useState<object[]>(
     Object(undefined)
   );
-    const [questionType, setQuestionType] = useState<string[]>([]);
+  const [questionType, setQuestionType] = useState<string[]>([]);
 
-    const router = useRouter();
-    const { roomNum } = router.query;
+  const router = useRouter();
+  const { roomNum } = router.query;
 
-    const { data: session } = useSession();
+  const { data: session } = useSession();
 
-    useEffect(() => {
-        socketInitializer();
-    }, []);
-    
-    useEffect(() => {
-    if (questionNumber !== 0) {
+  useEffect(() => {
+    socketInitializer();
+  }, []);
+
+  useEffect(() => {
+    if (questionNumber !== 0 && difficulty !== undefined) {
       getQuestion();
     }
-    }, [questionNumber]);
+  }, [questionNumber, difficulty]);
 
-    const socketInitializer = async () => {
+  const socketInitializer = async () => {
     // Call default io
     await fetch("/api/matching/socket");
     socket = io();
@@ -71,7 +69,11 @@ const Room = () => {
     socket.on("questionNumber", (qnNumber: Number) => {
       setQuestionNumber(qnNumber);
     });
-  };  
+
+    socket.on("difficulty", (difficulty: string) => {
+      setDifficulty(difficulty);
+    });
+  };
 
   const getQuestion = async () => {
     try {
@@ -90,28 +92,30 @@ const Room = () => {
       console.log(err);
     }
   };
-  
+
   function onChangeHandler(value: any, event: any) {
     setInput(value);
     socket.emit("collab-edit", roomNum, value);
   }
 
   return (
-        <RoomContext.Provider value={{ socket: socket, roomNum: roomNum!, session: session! }}>
-            <div className="dark:bg-black bg-light-100 dark:bg-opacity-20 overflow-y-hidden">
-                <StatusBar />
-                <div className="p-2">
-                    <div className="grid grid-cols-5 gap-2 pt-20">
-                        <Question
-                          questionDescription={questionDescription}
-                          questionName={questionName}
-                          questionDifficulty={questionDifficulty}
-                        />
-                        <EditorAndConsole input={input} onChangeHandler={onChangeHandler} />
-                        <Chat chats={chats} socketId={socket && socket.id} />
-                    </div>
-                </div>
-            </div>
+    <RoomContext.Provider
+      value={{ socket: socket, roomNum: roomNum!, session: session! }}
+    >
+      <div className="dark:bg-black bg-light-100 dark:bg-opacity-20 overflow-y-hidden">
+        <StatusBar />
+        <div className="p-2">
+          <div className="grid grid-cols-5 gap-2 pt-20">
+            <Question
+              questionDescription={questionDescription}
+              questionName={questionName}
+              questionDifficulty={questionDifficulty}
+            />
+            <EditorAndConsole input={input} onChangeHandler={onChangeHandler} />
+            <Chat chats={chats} socketId={socket && socket.id} />
+          </div>
+        </div>
+      </div>
     </RoomContext.Provider>
   );
 };

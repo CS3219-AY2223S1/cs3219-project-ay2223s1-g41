@@ -19,6 +19,7 @@ export default function SocketHandler(req: any, res: any) {
 
     let user1: string | undefined;
     let user2: string | undefined;
+    let difficulty: string | undefined;
 
     if (res.socket.server.io) {
         console.log("Socket is already running");
@@ -52,6 +53,7 @@ export default function SocketHandler(req: any, res: any) {
                 if (easyQ.length == 2) {
                     user1 = easyQ.shift()!;
                     user2 = easyQ.shift()!;
+                    difficulty = 'easy';
                     if (mediumQ.includes(user1)){
                         mediumQ.splice(mediumQ.indexOf(user1), 1);
                     }
@@ -69,6 +71,7 @@ export default function SocketHandler(req: any, res: any) {
                 if (mediumQ.length == 2) {
                     user1 = mediumQ.shift()!;
                     user2 = mediumQ.shift()!;
+                    difficulty = 'medium';
                     if (easyQ.includes(user1)){
                         easyQ.splice(easyQ.indexOf(user1), 1);
                     }
@@ -86,6 +89,7 @@ export default function SocketHandler(req: any, res: any) {
                 if (hardQ.length == 2) {
                     user1 = hardQ.shift()!;
                     user2 = hardQ.shift()!;
+                    difficulty = 'hard';
                     if (mediumQ.includes(user1)){
                         mediumQ.splice(mediumQ.indexOf(user1), 1);
                     }
@@ -162,6 +166,7 @@ export default function SocketHandler(req: any, res: any) {
 
                     // after both users have accepted, assign room number
                     io.to([user1!, user2!]).emit("assign-room", randomRoom);
+                    
                     user1 = undefined;
                     user2 = undefined;
                     accepts = [];
@@ -186,6 +191,8 @@ export default function SocketHandler(req: any, res: any) {
             socket.on("join-room", (room) => {
                 socket.join(room);
                 socket.to(room).emit("questionNumber", randomQnNumber);
+                //console.log(difficulty);
+                socket.to(room).emit("difficulty", difficulty);
             });
         });
     }
