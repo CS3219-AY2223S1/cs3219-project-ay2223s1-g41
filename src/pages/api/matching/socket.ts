@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import { Server } from "socket.io";
 
 let chatsOfAllRooms: any = {};
@@ -6,6 +7,8 @@ export default function SocketHandler(req: any, res: any) {
     const randomFixedInteger = (length: number) => {
         return Math.floor(Math.pow(10, length - 1) + Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1));
     };
+    const QN_COUNT = 3;
+    const randomQnNumber = randomInt(1, QN_COUNT + 1);
 
     let easyQ: (string | undefined)[] = [];
     let mediumQ: (string | undefined)[] = [];
@@ -182,6 +185,7 @@ export default function SocketHandler(req: any, res: any) {
 
             socket.on("join-room", (room) => {
                 socket.join(room);
+                socket.to(room).emit("questionNumber", randomQnNumber);
             });
         });
     }
