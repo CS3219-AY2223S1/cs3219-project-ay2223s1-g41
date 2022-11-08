@@ -1,23 +1,25 @@
 {
-    "questions":[
+    "questions": [
         {
             "id": 1,
             "name": "Check if sentence is Pangram",
             "difficulty": "easy",
             "description": "A panagram is a sentence where every letter of the English alphabet appears at least once. Given a string sentence containing only lowercase English letters, return true if sentence is a panagram, or false otherwise.",
-            "examples": [{
-                "input": {
-                    "sentence": "thequickbrownfoxjumpsoverthelazydog"
+            "examples": [
+                {
+                    "input": {
+                        "sentence": "thequickbrownfoxjumpsoverthelazydog"
+                    },
+                    "output": true,
+                    "explanation": "sentence contains at least one of every letter of the English alphabet."
                 },
-                "output": true,
-                "explanation": "sentence contains at least one of every letter of the English alphabet."
-            },
-            {
-                "input": {
-                    "sentence": "peerprep"
-                },
-                "output": false
-            }],
+                {
+                    "input": {
+                        "sentence": "peerprep"
+                    },
+                    "output": false
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -38,20 +40,22 @@
             "name": "Palindrome Number",
             "difficulty": "easy",
             "description": "Given an integer x, return true if x is a palindrome integer. An integer is a palindrome when it reads the same backward as forward. For example, 121 is a palindrome while 123 is not.",
-            "examples": [{
-                "input": {
-                    "x": 121
+            "examples": [
+                {
+                    "input": {
+                        "x": 121
+                    },
+                    "output": true,
+                    "explanation": "121 reads as 121 from left to right and from right to left."
                 },
-                "output": true,
-                "explanation": "121 reads as 121 from left to right and from right to left."
-            },
-            {
-                "input": {
-                    "x": -121
-                },
-                "output": false,
-                "explanation": "From left to right, it reads -121. From right to left, it becomes 121-. Therefore, it is not a palindrome."
-            }],
+                {
+                    "input": {
+                        "x": -121
+                    },
+                    "output": false,
+                    "explanation": "From left to right, it reads -121. From right to left, it becomes 121-. Therefore, it is not a palindrome."
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -72,36 +76,38 @@
             "name": "Merge Sorted Array",
             "difficulty": "easy",
             "description": "You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively. Merge nums1 and nums2 into a single array sorted in non-decreasing order. The final sorted array should not be returned by the function, but instead be stored inside the array nums1. To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.",
-            "examples": [{
-                "input": {
-                    "nums1": [1, 2, 3, 0, 0, 0],
-                    "m": 3,
-                    "nums2": [2, 5, 6],
-                    "n": 3
+            "examples": [
+                {
+                    "input": {
+                        "nums1": [1, 2, 3, 0, 0, 0],
+                        "m": 3,
+                        "nums2": [2, 5, 6],
+                        "n": 3
+                    },
+                    "output": [1, 2, 2, 3, 5, 6],
+                    "explanation": "The arrays we are merging are [1, 2, 3] and [2, 5, 6]."
                 },
-                "output": [1, 2, 2, 3, 5, 6],
-                "explanation": "The arrays we are merging are [1, 2, 3] and [2, 5, 6]."
-            },
-            {
-                "input": {
-                    "nums1": [1],
-                    "m": 1,
-                    "nums2": [],
-                    "n": 0
+                {
+                    "input": {
+                        "nums1": [1],
+                        "m": 1,
+                        "nums2": [],
+                        "n": 0
+                    },
+                    "output": [1],
+                    "explanation": "The arrays we are merging are [1] and []. The result of the merge is [1]."
                 },
-                "output": [1],
-                "explanation": "The arrays we are merging are [1] and []. The result of the merge is [1]."
-            },
-            {
-            "input": {
-                "nums1": [0],
-                "m": 0,
-                "nums2": [1],
-                "n": 1
-            },
-            "output": [1],
-            "explanation": "The arrays we are merging are [] and [1]. The result of the merge is [1]."
-            }],
+                {
+                    "input": {
+                        "nums1": [0],
+                        "m": 0,
+                        "nums2": [1],
+                        "n": 1
+                    },
+                    "output": [1],
+                    "explanation": "The arrays we are merging are [] and [1]. The result of the merge is [1]."
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -131,42 +137,64 @@
                     "output": [1]
                 }
             ]
-        }, 
+        },
         {
             "id": 4,
             "name": "Permutations",
             "difficulty": "medium",
             "description": "Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.",
-            "examples": [{
-                "input": {
-                    "nums": [1, 2, 3]
-                },
-                "output": [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
-            },
-            {
-                "input": {
-                    "nums": [1]
-                },
-                "output": [[1]]
-            },
-            {
-                "input": {
-                    "nums": [0, 1]
-                },
-                "output": [[0, 1], [1, 0]]
-            }],
-            "tests": [
+            "examples": [
                 {
                     "input": {
                         "nums": [1, 2, 3]
                     },
-                    "output": [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+                    "output": [
+                        [1, 2, 3],
+                        [1, 3, 2],
+                        [2, 1, 3],
+                        [2, 3, 1],
+                        [3, 1, 2],
+                        [3, 2, 1]
+                    ]
+                },
+                {
+                    "input": {
+                        "nums": [1]
+                    },
+                    "output": [[1]]
                 },
                 {
                     "input": {
                         "nums": [0, 1]
                     },
-                    "output": [[0, 1], [1, 0]]
+                    "output": [
+                        [0, 1],
+                        [1, 0]
+                    ]
+                }
+            ],
+            "tests": [
+                {
+                    "input": {
+                        "nums": [1, 2, 3]
+                    },
+                    "output": [
+                        [1, 2, 3],
+                        [1, 3, 2],
+                        [2, 1, 3],
+                        [2, 3, 1],
+                        [3, 1, 2],
+                        [3, 2, 1]
+                    ]
+                },
+                {
+                    "input": {
+                        "nums": [0, 1]
+                    },
+                    "output": [
+                        [0, 1],
+                        [1, 0]
+                    ]
                 },
                 {
                     "input": {
@@ -181,30 +209,54 @@
             "name": "Permutations II",
             "difficulty": "medium",
             "description": "Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.",
-            "examples": [{
-                "input": {
-                    "nums": [1, 1, 2]
-                },
-                "output": [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
-            },
-            {
-                "input": {
-                    "nums": [1, 2, 3]
-                },
-                "output": [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
-            }],
-            "tests": [
+            "examples": [
                 {
                     "input": {
                         "nums": [1, 1, 2]
                     },
-                    "output": [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
+                    "output": [
+                        [1, 1, 2],
+                        [1, 2, 1],
+                        [2, 1, 1]
+                    ]
                 },
                 {
                     "input": {
                         "nums": [1, 2, 3]
                     },
-                    "output": [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+                    "output": [
+                        [1, 2, 3],
+                        [1, 3, 2],
+                        [2, 1, 3],
+                        [2, 3, 1],
+                        [3, 1, 2],
+                        [3, 2, 1]
+                    ]
+                }
+            ],
+            "tests": [
+                {
+                    "input": {
+                        "nums": [1, 1, 2]
+                    },
+                    "output": [
+                        [1, 1, 2],
+                        [1, 2, 1],
+                        [2, 1, 1]
+                    ]
+                },
+                {
+                    "input": {
+                        "nums": [1, 2, 3]
+                    },
+                    "output": [
+                        [1, 2, 3],
+                        [1, 3, 2],
+                        [2, 1, 3],
+                        [2, 3, 1],
+                        [3, 1, 2],
+                        [3, 2, 1]
+                    ]
                 }
             ]
         },
@@ -213,28 +265,34 @@
             "name": "Combination Sum",
             "difficulty": "medium",
             "description": "Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order. The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different. The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.",
-            "examples": [{
-                "input": {
-                    "candidates": [2, 3, 6, 7],
-                    "target": 7
+            "examples": [
+                {
+                    "input": {
+                        "candidates": [2, 3, 6, 7],
+                        "target": 7
+                    },
+                    "output": [[2, 2, 3], [7]],
+                    "explanation": "2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times. 7 is a candidate and 7 = 7. These are the only 2 combinations."
                 },
-                "output": [[2, 2, 3], [7]],
-                "explanation": "2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times. 7 is a candidate and 7 = 7. These are the only 2 combinations."
-            },
-            {
-                "input": {
-                    "candidates": [2, 3, 5],
-                    "target": 8
+                {
+                    "input": {
+                        "candidates": [2, 3, 5],
+                        "target": 8
+                    },
+                    "output": [
+                        [2, 2, 2, 2],
+                        [2, 3, 3],
+                        [3, 5]
+                    ]
                 },
-                "output": [[2, 2, 2, 2], [2, 3, 3], [3, 5]]
-            },
-            {
-                "input": {
-                    "candidates": [2],
-                    "target": 1
-                },
-                "output": []
-            }],
+                {
+                    "input": {
+                        "candidates": [2],
+                        "target": 1
+                    },
+                    "output": []
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -248,7 +306,11 @@
                         "candidates": [2, 3, 5],
                         "target": 8
                     },
-                    "output": [[2, 2, 2, 2], [2, 3, 3], [3, 5]]
+                    "output": [
+                        [2, 2, 2, 2],
+                        [2, 3, 3],
+                        [3, 5]
+                    ]
                 },
                 {
                     "input": {
@@ -264,29 +326,39 @@
             "name": "Merge k Sorted Lists",
             "difficulty": "hard",
             "description": "You are given an array of k linked-lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.",
-            "examples": [{
-                "input": {
-                    "lists": [[1, 4, 5], [1, 3, 4], [2, 6]]
+            "examples": [
+                {
+                    "input": {
+                        "lists": [
+                            [1, 4, 5],
+                            [1, 3, 4],
+                            [2, 6]
+                        ]
+                    },
+                    "output": [1, 1, 2, 3, 4, 4, 5, 6],
+                    "explanation": "The linked-lists are [1 -> 4 -> 5, 1 -> 3 -> 4, 2 -> 6]. Merging them into one sorted list: 1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6"
                 },
-                "output": [1, 1, 2, 3, 4, 4, 5, 6],
-                "explanation": "The linked-lists are [1 -> 4 -> 5, 1 -> 3 -> 4, 2 -> 6]. Merging them into one sorted list: 1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6"
-            },
-            {
-                "input": {
-                    "lists": []
+                {
+                    "input": {
+                        "lists": []
+                    },
+                    "output": []
                 },
-                "output": []
-            },
-            {
-                "input": {
-                    "lists": [[]]
-                },
-                "output": []
-            }],
+                {
+                    "input": {
+                        "lists": [[]]
+                    },
+                    "output": []
+                }
+            ],
             "tests": [
                 {
                     "input": {
-                        "lists": [[1, 4, 5], [1, 3, 4], [2, 6]]
+                        "lists": [
+                            [1, 4, 5],
+                            [1, 3, 4],
+                            [2, 6]
+                        ]
                     },
                     "output": [1, 1, 2, 3, 4, 4, 5, 6]
                 },
@@ -309,30 +381,32 @@
             "name": "Regular Expression Matching",
             "difficulty": "hard",
             "description": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where: '.' matches any single character, and '*' matches zero of more of the preceding element. The matching should cover the entire input string (not partial).",
-            "examples": [{
-                "input": {
-                    "s": "aa",
-                    "p": "a"
+            "examples": [
+                {
+                    "input": {
+                        "s": "aa",
+                        "p": "a"
+                    },
+                    "output": false,
+                    "explanation": "'a' does not match the entire string 'aa'."
                 },
-                "output": false,
-                "explanation": "'a' does not match the entire string 'aa'."
-            },
-            {
-                "input": {
-                    "s": "aa",
-                    "p": "a*"
+                {
+                    "input": {
+                        "s": "aa",
+                        "p": "a*"
+                    },
+                    "output": true,
+                    "explanation": "'*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes 'aa'."
                 },
-                "output": true,
-                "explanation": "'*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes 'aa'."
-            },
-            {
-                "input": {
-                    "s": "ab",
-                    "p": ".*"
-                },
-                "output": true,
-                "explanation": "'.*' means zero or more (*) of any character (.)."
-            }],
+                {
+                    "input": {
+                        "s": "ab",
+                        "p": ".*"
+                    },
+                    "output": true,
+                    "explanation": "'.*' means zero or more (*) of any character (.)."
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -362,22 +436,24 @@
             "name": "Edit Distance",
             "difficulty": "hard",
             "description": "Given two strings word1 and word2, return the mininum number of operations required to convert word1 to word2. You have the following three operations permitted on a word - insert a character, delete a character, replace a character",
-            "examples": [{
-                "input": {
-                    "word1": "horse",
-                    "word2": "ros"
+            "examples": [
+                {
+                    "input": {
+                        "word1": "horse",
+                        "word2": "ros"
+                    },
+                    "output": 3,
+                    "explanation": "horse -> rorse (replace 'h' with 'r'), rorse -> rose (remove 'r'), rose -> ros (remove 'e')."
                 },
-                "output": 3,
-                "explanation": "horse -> rorse (replace 'h' with 'r'), rorse -> rose (remove 'r'), rose -> ros (remove 'e')."
-            },
-            {
-                "input": {
-                    "word1": "intention",
-                    "word2": "execution"
-                },
-                "output": 5,
-                "explanation": "intention -> inention (remove 't'), inention -> enention (replace ‘i’ with 'e'), enention -> exention (replace 'n' with 'x'), exention -> exection (replace 'n' with 'c'), exection -> execution (insert 'u')."
-            }],
+                {
+                    "input": {
+                        "word1": "intention",
+                        "word2": "execution"
+                    },
+                    "output": 5,
+                    "explanation": "intention -> inention (remove 't'), inention -> enention (replace ‘i’ with 'e'), enention -> exention (replace 'n' with 'x'), exention -> exection (replace 'n' with 'c'), exection -> execution (insert 'u')."
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -400,20 +476,22 @@
             "name": "Add Binary",
             "difficulty": "easy",
             "description": "Given two binary strings a and b, return their sum as a binary string.",
-            "examples": [{
-                "input": {
-                    "a": "11",
-                    "b": "1"
+            "examples": [
+                {
+                    "input": {
+                        "a": "11",
+                        "b": "1"
+                    },
+                    "output": "100"
                 },
-                "output": "100"
-            },
-            {
-                "input": {
-                    "a": "1010",
-                    "b": "1011"
-                },
-                "output": "10101"
-            }],
+                {
+                    "input": {
+                        "a": "1010",
+                        "b": "1011"
+                    },
+                    "output": "10101"
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -436,24 +514,26 @@
             "name": "Single Number",
             "difficulty": "easy",
             "description": "Given a non-empty array of integer nums, every elements appears twice except for one. Find that single one. You must implement a solution with a linear runtime complexity and use only constant extra space.",
-            "examples": [{
-                "input": {
-                    "nums": [2, 2, 1]
+            "examples": [
+                {
+                    "input": {
+                        "nums": [2, 2, 1]
+                    },
+                    "output": 1
                 },
-                "output": 1
-            },
-            {
-                "input": {
-                    "nums": [4, 1, 2, 1, 2]
+                {
+                    "input": {
+                        "nums": [4, 1, 2, 1, 2]
+                    },
+                    "output": 4
                 },
-                "output": 4
-            },
-            {
-                "input": {
-                    "nums": [1]
-                },
-                "output": 1
-            }],
+                {
+                    "input": {
+                        "nums": [1]
+                    },
+                    "output": 1
+                }
+            ],
             "tests": [
                 {
                     "input": {
@@ -480,34 +560,46 @@
             "name": "Combination Sum II",
             "difficulty": "medium",
             "description": "Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target. Each number in candidates may only be used once in the combination. Note: The solution set must not contain duplicate combinations.",
-            "examples": [{
-                "input": {
-                    "candidates": [10, 1, 2, 7, 6, 1, 5],
-                    "target": 8
+            "examples": [
+                {
+                    "input": {
+                        "candidates": [10, 1, 2, 7, 6, 1, 5],
+                        "target": 8
+                    },
+                    "output": [
+                        [1, 1, 6],
+                        [1, 2, 5],
+                        [1, 7],
+                        [2, 6]
+                    ]
                 },
-                "output": [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
-            },
-            {
-               "input": {
-                    "candidates": [2, 5, 2, 1, 2],
-                    "target": 5
-               },
-               "output": [[1, 2, 2], [5]]
-            }],
+                {
+                    "input": {
+                        "candidates": [2, 5, 2, 1, 2],
+                        "target": 5
+                    },
+                    "output": [[1, 2, 2], [5]]
+                }
+            ],
             "tests": [
                 {
                     "input": {
                         "candidates": [10, 1, 2, 7, 6, 1, 5],
                         "target": 8
                     },
-                    "output": [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
+                    "output": [
+                        [1, 1, 6],
+                        [1, 2, 5],
+                        [1, 7],
+                        [2, 6]
+                    ]
                 },
                 {
-                   "input": {
+                    "input": {
                         "candidates": [2, 5, 2, 1, 2],
                         "target": 5
-                   },
-                   "output": [[1, 2, 2], [5]]
+                    },
+                    "output": [[1, 2, 2], [5]]
                 }
             ]
         },
@@ -557,14 +649,14 @@
                     },
                     "output": 3,
                     "explanation": "The numbers in the range [1, 2] are all in the array."
-                }, 
+                },
                 {
                     "input": {
                         "nums": [3, 4, 1, -1]
                     },
                     "output": 2,
                     "explanation": "1 is in the array but 2 is missing."
-                }, 
+                },
                 {
                     "input": {
                         "nums": [7, 8, 9, 11, 12]
@@ -580,14 +672,14 @@
                     },
                     "output": 3,
                     "explanation": "The numbers in the range [1, 2] are all in the array."
-                }, 
+                },
                 {
                     "input": {
                         "nums": [3, 4, 1, -1]
                     },
                     "output": 2,
                     "explanation": "1 is in the array but 2 is missing."
-                }, 
+                },
                 {
                     "input": {
                         "nums": [7, 8, 9, 11, 12]

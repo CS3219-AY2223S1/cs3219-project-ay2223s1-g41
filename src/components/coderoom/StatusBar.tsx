@@ -2,6 +2,7 @@ import router from "next/router";
 import { useContext } from "react";
 import { useStopwatch } from "react-timer-hook";
 import { RoomContext } from "../../pages/coderoom/[roomNum]";
+import ReactTooltip from "react-tooltip";
 
 const Digit = ({ value }: { value: number }) => {
     const leftDigit = value >= 10 ? value.toString()[0] : "0";
@@ -36,14 +37,22 @@ const Timer = () => {
     );
 };
 
-export default function StatusBar() {
+export default function StatusBar({ createTime }: { createTime: Date }) {
     const { socket, roomNum, session } = { ...useContext(RoomContext) };
-
+    console.log(socket);
     return (
         <header className="sticky top-20 z-30 flex justify-between items-center w-full p-4 bg-white dark:bg-dark-100 shadow-lg">
-            <div className="flex items-center gap-2 px-4 py-1 font-bold outline outline-green-200 bg-green-200 rounded text-dark-100">
+            <div
+                data-tip
+                data-for="room-detail"
+                className="flex items-center gap-2 px-4 py-1 font-bold outline outline-green-200 bg-green-200 rounded text-dark-100"
+            >
                 Room number: {roomNum}
             </div>
+
+            <ReactTooltip id="room-detail" effect="solid" place="bottom">
+                <span>Room created at: {createTime.toLocaleString()}</span>
+            </ReactTooltip>
 
             <Timer />
 
