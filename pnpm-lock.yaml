@@ -13,6 +13,7 @@ specifiers:
   bcryptjs: ^2.4.3
   eslint: 8.24.0
   eslint-config-next: 12.3.1
+  ip: ^1.1.8
   lodash: ^4.17.21
   monaco-editor: ^0.34.0
   mongodb: ^4.10.0
@@ -42,6 +43,7 @@ dependencies:
   autoprefixer: 10.4.12_postcss@8.4.16
   axios: 0.27.2
   bcryptjs: 2.4.3
+  ip: 1.1.8
   lodash: 4.17.21
   monaco-editor: 0.34.0
   mongodb: 4.10.0
@@ -1511,6 +1513,10 @@ packages:
       has: 1.0.3
       side-channel: 1.0.4
     dev: true
+
+  /ip/1.1.8:
+    resolution: {integrity: sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==}
+    dev: false
 
   /ip/2.0.0:
     resolution: {integrity: sha512-WKa+XuLG1A1R0UWhl2+1XQSi+fZWMsYKffMZTTYsiZaUD8k2yDAj5atimTUD2TZkyCkNEeYE5NhFZmupOGtjYQ==}
