@@ -18,6 +18,7 @@ specifiers:
   next-auth: ^4.12.0
   next-themes: ^0.2.1
   postcss: ^8.4.16
+  python-shell: ^3.0.1
   react: 18.2.0
   react-chat-ui: ^0.4.0
   react-dom: 18.2.0
@@ -43,6 +44,7 @@ dependencies:
   next-auth: 4.12.0_0661e55d4ddb87f80f0bb2b0a946ce7e
   next-themes: 0.2.1_0661e55d4ddb87f80f0bb2b0a946ce7e
   postcss: 8.4.16
+  python-shell: 3.0.1
   react: 18.2.0
   react-chat-ui: 0.4.0_react-dom@18.2.0+react@18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -2148,6 +2150,11 @@ packages:
   /punycode/2.1.1:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
+
+  /python-shell/3.0.1:
+    resolution: {integrity: sha512-TWeotuxe1auhXa5bGRScxnc2J+0r41NBntSa6RYZtMBLtAEsvCboKrEbW6DvASosWQepVkhZZlT3B5Ei766G+Q==}
+    engines: {node: '>=0.10'}
+    dev: false
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
