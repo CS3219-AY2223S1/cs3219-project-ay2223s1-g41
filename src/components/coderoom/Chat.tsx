@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ChatFeed, Message } from "react-chat-ui";
 import { RoomContext } from "../../pages/coderoom/[roomNum]";
+import useWindowDimensions from "../../utils/useWindowDimension";
 
 export default function Chat({ chats, socketId }: { chats: Message[]; socketId: string | undefined }) {
     const [message, setMessage] = useState<string>("");
@@ -50,13 +51,10 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
     }, [textareaElement, handleSubmit]);
 
     return (
-        <div className="col-span-1 dark:bg-dark-100 bg-white rounded-lg flex flex-col justify-between">
-            <div className={`p-2 h-[545px] overflow-auto overflow-x-auto justify-between flex flex-col`}>
-                <div className="font-bold text-xl">Chat</div>
-                <div className="flex flex-col justify-center items-center"></div>
-
+        <div className="p-2 w-full h-full col-span-1 dark:bg-dark-100 bg-white rounded-lg grid grid-rows-3 grid-flow-col">
+            <div className={`row-span-2 overflow-auto overflow-x-auto justify-between flex flex-col break-all h-full`} style={{ height: "50vh" }}>
+                <p className="font-bold text-xl">Chat</p>
                 <ChatFeed
-                    //messages={[new Message({ id: 0, message: "hi", senderName: "me" }), new Message({ id: 0, message: "hi", senderName: "me" })]} // Array: list of message objects
                     messages={chats.map((chat) => new Message({ ...chat, id: chat.id === socketId ? 0 : 1 }))}
                     isTyping={false} // Boolean: is the recipient typing
                     hasInputField={false} // Boolean: use our input, or use your own
@@ -74,9 +72,8 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
                     }}
                 />
             </div>
-            <div className="h-0.5 mb-2 f-full dark:bg-dark-200 bg-light-100" />
 
-            <div className="flex">
+            <div className="row-span-1 flex border-t-2 dark:border-dark-200 border-light-100 h-full">
                 <textarea
                     ref={textareaRef}
                     placeholder="Type a message..."
@@ -87,7 +84,7 @@ export default function Chat({ chats, socketId }: { chats: Message[]; socketId: 
                     className="w-full break-words break-all h-40 dark:bg-dark-100 bg-white resize-none p-2 dark:text-light-100 text-dark-200 focus:outline-none"
                 />
                 <button
-                    className="dark:bg-dark-200 opacity-80 h-fit px-2 py-1 hover:opacity-100 mr-1 mt-12 rounded-sm"
+                    className="dark:bg-dark-200 opacity-80 h-fit px-2 py-1 hover:opacity-100 mr-1 mt-30 rounded-sm"
                     onClick={() => handleSubmit()}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">

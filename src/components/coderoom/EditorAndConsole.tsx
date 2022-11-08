@@ -80,14 +80,14 @@ export default function EditorAndConsole({ input, onChangeHandler }: { input: st
                         </div>
 
                         <Editor
-                            height={`${height! - 235}px`}
+                            height={`${height! - 255}px`}
                             theme={currentTheme}
                             defaultLanguage="python"
                             language={currentLanguage}
                             loading={<Loader />}
                             value={input}
                             onChange={onChangeHandler}
-                            className="mt-2"
+                            className="mt-2 h-full"
                         />
                     </Tab.Panel>
                     <Tab.Panel
