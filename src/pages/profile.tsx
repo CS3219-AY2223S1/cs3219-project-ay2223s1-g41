@@ -4,8 +4,6 @@ import { SpinnerInfinity } from "spinners-react";
 import router from "next/router";
 import { useSession } from "next-auth/react";
 
-const ip = require("ip");
-
 export default function Profile() {
     const { data: session, status } = useSession({
         required: true,
@@ -31,9 +29,9 @@ export default function Profile() {
                 ) : (
                     <>
                         <Sidebar />
-                        <div className="flex flex-col w-full gap-2">
+                        <div className="flex w-full gap-2">
+                            <h1 className="text-sm">User:</h1>
                             <h1 className="text-sm">{session?.user?.email}</h1>
-                            <p>IP address {ip.address()}</p>
                         </div>
                     </>
                 )}

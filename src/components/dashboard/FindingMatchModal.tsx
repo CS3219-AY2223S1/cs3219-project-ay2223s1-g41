@@ -1,8 +1,8 @@
 import { XIcon } from "@heroicons/react/solid";
 import { Dispatch, useEffect, useRef, useState } from "react";
 
-export default function FindingMatchModal({ setIsFindingMatch, socket }: { setIsFindingMatch: Dispatch<boolean> , socket: any;}) {
-    const [timeLeft, setTimeLeft] = useState(10);
+export default function FindingMatchModal({ setIsFindingMatch, socket }: { setIsFindingMatch: Dispatch<boolean>; socket: any }) {
+    const [timeLeft, setTimeLeft] = useState(30);
 
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -40,12 +40,15 @@ export default function FindingMatchModal({ setIsFindingMatch, socket }: { setIs
                             Finding match...
                         </p>
                     </div>
-                    <button className="pr-5" onClick={() => {
-                        setIsFindingMatch(false);
-                        socket?.emit("cancel-find-match", socket.id);
-                        console.log("disconnect");
-                        socket?.disconnect();
-                    }}>
+                    <button
+                        className="pr-5"
+                        onClick={() => {
+                            setIsFindingMatch(false);
+                            socket?.emit("cancel-find-match", socket.id);
+                            console.log("disconnect");
+                            socket?.disconnect();
+                        }}
+                    >
                         <XIcon className="w-5 h-5 text-red-600" aria-hidden="true" />
                     </button>
                 </>

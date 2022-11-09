@@ -24,53 +24,41 @@ export default function Question({ question }: { question: QuestionType | undefi
                         {question.examples.map((example, index) => (
                             <div key={index} className="text-md gap-2 my-8 flex flex-col">
                                 Example {index + 1}:
-                                <div className="flex flex-col gap-2 dark:bg-dark-200 bg-light-100 p-2 rounded-md">
-                                    <div className="gap-1 break-all">
+                                <div className="flex flex-col gap-2 dark:bg-dark-200 bg-light-100 p-2 rounded-md flex-wrap break-all">
+                                    <div className="gap-1">
                                         <p className="font-lg font-bold">Input:</p>
-                                        <div className="flex-wrap">
+                                        <div className="flex flex-col">
                                             {_.isObject(example.input) ? (
                                                 Object.entries(example.input).map((input, index) => (
-                                                    <pre key={index}>
-                                                        <code>
-                                                            {input[0]} = {JSON.stringify(input[1])}
-                                                        </code>
-                                                    </pre>
+                                                    <code key={index}>
+                                                        {input[0]} = {JSON.stringify(input[1])}
+                                                    </code>
                                                 ))
                                             ) : _.isArray(example.input) ? (
-                                                <pre>
-                                                    <code key={index}>{JSON.stringify(example.input)}</code>
-                                                </pre>
+                                                <code key={index}>{JSON.stringify(example.input)}</code>
                                             ) : (
-                                                <pre>
-                                                    <code>{example.input}</code>
-                                                </pre>
+                                                <code>{example.input}</code>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="gap-1 break-all">
+                                    <div className="gap-1">
                                         <p className="font-lg font-bold">Output:</p>
-                                        <div className="flex-wrap">
+                                        <div className="flex flex-col">
                                             {_.isObject(example.output) ? (
                                                 Object.entries(example.output).map((output, index) => (
-                                                    <pre key={index}>
-                                                        <code>
-                                                            {output[0]} = {JSON.stringify(output[1])}
-                                                        </code>
-                                                    </pre>
+                                                    <code key={index}>
+                                                        {output[0]} = {JSON.stringify(output[1])}
+                                                    </code>
                                                 ))
                                             ) : _.isArray(example.output) ? (
-                                                <pre>
-                                                    <code key={index}>{JSON.stringify(example.output)}</code>
-                                                </pre>
+                                                <code key={index}>{JSON.stringify(example.output)}</code>
                                             ) : (
-                                                <pre>
-                                                    <code>{example.output}</code>
-                                                </pre>
+                                                <code>{example.output}</code>
                                             )}
                                         </div>
                                     </div>
                                 </div>
-                                <div>Explanation: {example.explanation}</div>
+                                {example.explanation && <div>Explanation: {example.explanation}</div>}
                             </div>
                         ))}
                     </div>

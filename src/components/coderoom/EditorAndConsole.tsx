@@ -14,7 +14,6 @@ export default function EditorAndConsole({ input, onChangeHandler }: { input: st
     const [results, setResults] = useState<any[]>([]);
 
     async function submitCode(code: string) {
-        console.log(code);
         let config = {
             method: "post",
             url: "/api/coderunner",

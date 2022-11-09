@@ -175,7 +175,7 @@ export default function SocketHandler(req: any, res: any) {
             // }
 
             socket.on("collab-edit", (room, message) => {
-                socket.to(room).emit("receive-collab-edit", message);
+                io.to(room).emit("receive-collab-edit", message);
             });
 
             socket.on("send-message", (room: string, message: { sender: string; time: Date; message: string }) => {
@@ -185,14 +185,15 @@ export default function SocketHandler(req: any, res: any) {
                 }
                 chatsOfAllRooms[room].push(message);
                 console.log(chatsOfAllRooms);
-                socket.to(room).emit("message-received", chatsOfAllRooms[room]);
+                io.to(room).emit("message-received", chatsOfAllRooms[room]);
             });
 
             socket.on("join-room", (room) => {
                 socket.join(room);
-                socket.to(room).emit("questionNumber", randomQnNumber);
-                //console.log(difficulty);
-                socket.to(room).emit("difficulty", difficulty);
+                let randomQnNumber = randomInt(1, QN_COUNT + 1);
+                io.to(room).emit("questionNumber", randomQnNumber);
+                console.log(randomQnNumber);
+                io.to(room).emit("difficulty", difficulty);
             });
         });
     }
