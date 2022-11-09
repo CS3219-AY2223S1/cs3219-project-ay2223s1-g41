@@ -35,7 +35,8 @@ const Room = () => {
     }, []);
 
     useEffect(() => {
-        if (questionNumber !== 0 && difficulty !== undefined) {
+        if (questionNumber !== undefined && difficulty !== undefined) {
+            console.log("get question");
             getQuestion();
         }
     }, [questionNumber, difficulty]);
@@ -83,11 +84,8 @@ const Room = () => {
     return (
         <RoomContext.Provider value={{ socket: socket, roomNum: roomNum!, session: session! }}>
             <div className="dark:bg-black bg-light-100 dark:bg-opacity-20 h-screen overflow-hidden">
-                <StatusBar createTime={new Date()} />
-                <div
-                    className="grid grid-cols-5 gap-2 py-20 p-2 mt-2 h-full"
-                    //style={{ height: "90.5vh" }}
-                >
+                <StatusBar />
+                <div className="grid grid-cols-5 gap-2 py-20 p-2 mt-2 h-full">
                     <Question question={question} />
                     <EditorAndConsole input={input} onChangeHandler={onChangeHandler} />
                     <Chat chats={chats} socketId={socket && socket.id} />

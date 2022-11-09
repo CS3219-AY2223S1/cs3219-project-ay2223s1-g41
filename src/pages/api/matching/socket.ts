@@ -7,13 +7,13 @@ export default function SocketHandler(req: any, res: any) {
     const randomFixedInteger = (length: number) => {
         return Math.floor(Math.pow(10, length - 1) + Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1));
     };
-    const QN_COUNT = 3;
+    const QN_COUNT = 5;
     const randomQnNumber = randomInt(1, QN_COUNT + 1);
 
     let easyQ: (string | undefined)[] = [];
     let mediumQ: (string | undefined)[] = [];
     let hardQ: (string | undefined)[] = [];
-    
+
     let room: string[] = [];
     let accepts: string[] = [];
 
@@ -37,7 +37,7 @@ export default function SocketHandler(req: any, res: any) {
                 for (let index = 0; index < selectedDifficulties.length; index++) {
                     temp.push(selectedDifficulties[index].difficulty);
                 }
-                
+
                 console.log(temp);
                 if (temp.includes("Easy")) {
                     easyQ.push(socket.id);
@@ -48,22 +48,22 @@ export default function SocketHandler(req: any, res: any) {
                 if (temp.includes("Hard")) {
                     hardQ.push(socket.id);
                 }
-                
+
                 // check if any one queue meet 2 ppl, remove the users from all queue
                 if (easyQ.length == 2) {
                     user1 = easyQ.shift()!;
                     user2 = easyQ.shift()!;
-                    difficulty = 'easy';
-                    if (mediumQ.includes(user1)){
+                    difficulty = "easy";
+                    if (mediumQ.includes(user1)) {
                         mediumQ.splice(mediumQ.indexOf(user1), 1);
                     }
-                    if (mediumQ.includes(user2)){
+                    if (mediumQ.includes(user2)) {
                         mediumQ.splice(mediumQ.indexOf(user2), 1);
                     }
-                    if (hardQ.includes(user1)){
+                    if (hardQ.includes(user1)) {
                         hardQ.splice(hardQ.indexOf(user1), 1);
                     }
-                    if (hardQ.includes(user2)){
+                    if (hardQ.includes(user2)) {
                         hardQ.splice(hardQ.indexOf(user2), 1);
                     }
                 }
@@ -71,17 +71,17 @@ export default function SocketHandler(req: any, res: any) {
                 if (mediumQ.length == 2) {
                     user1 = mediumQ.shift()!;
                     user2 = mediumQ.shift()!;
-                    difficulty = 'medium';
-                    if (easyQ.includes(user1)){
+                    difficulty = "medium";
+                    if (easyQ.includes(user1)) {
                         easyQ.splice(easyQ.indexOf(user1), 1);
                     }
-                    if (easyQ.includes(user2)){
+                    if (easyQ.includes(user2)) {
                         easyQ.splice(easyQ.indexOf(user2), 1);
                     }
-                    if (hardQ.includes(user1)){
+                    if (hardQ.includes(user1)) {
                         hardQ.splice(hardQ.indexOf(user1), 1);
                     }
-                    if (hardQ.includes(user2)){
+                    if (hardQ.includes(user2)) {
                         hardQ.splice(hardQ.indexOf(user2), 1);
                     }
                 }
@@ -89,17 +89,17 @@ export default function SocketHandler(req: any, res: any) {
                 if (hardQ.length == 2) {
                     user1 = hardQ.shift()!;
                     user2 = hardQ.shift()!;
-                    difficulty = 'hard';
-                    if (mediumQ.includes(user1)){
+                    difficulty = "hard";
+                    if (mediumQ.includes(user1)) {
                         mediumQ.splice(mediumQ.indexOf(user1), 1);
                     }
-                    if (mediumQ.includes(user2)){
+                    if (mediumQ.includes(user2)) {
                         mediumQ.splice(mediumQ.indexOf(user2), 1);
                     }
-                    if (easyQ.includes(user1)){
+                    if (easyQ.includes(user1)) {
                         easyQ.splice(easyQ.indexOf(user1), 1);
                     }
-                    if (easyQ.includes(user2)){
+                    if (easyQ.includes(user2)) {
                         easyQ.splice(easyQ.indexOf(user2), 1);
                     }
                 }
@@ -112,7 +112,7 @@ export default function SocketHandler(req: any, res: any) {
             });
 
             socket.on("cancel-find-match", (socketId) => {
-                console.log("should disconnect soon")
+                console.log("should disconnect soon");
                 if (easyQ.includes(socket.id)) {
                     easyQ.splice(easyQ.indexOf(socket.id));
                 }
@@ -166,7 +166,7 @@ export default function SocketHandler(req: any, res: any) {
 
                     // after both users have accepted, assign room number
                     io.to([user1!, user2!]).emit("assign-room", randomRoom);
-                    
+
                     user1 = undefined;
                     user2 = undefined;
                     accepts = [];
@@ -175,7 +175,7 @@ export default function SocketHandler(req: any, res: any) {
             // }
 
             socket.on("collab-edit", (room, message) => {
-                socket.to(room).emit("receive-collab-edit", message);
+                io.to(room).emit("receive-collab-edit", message);
             });
 
             socket.on("send-message", (room: string, message: { sender: string; time: Date; message: string }) => {
@@ -185,14 +185,15 @@ export default function SocketHandler(req: any, res: any) {
                 }
                 chatsOfAllRooms[room].push(message);
                 console.log(chatsOfAllRooms);
-                socket.to(room).emit("message-received", chatsOfAllRooms[room]);
+                io.to(room).emit("message-received", chatsOfAllRooms[room]);
             });
 
             socket.on("join-room", (room) => {
                 socket.join(room);
-                socket.to(room).emit("questionNumber", randomQnNumber);
-                //console.log(difficulty);
-                socket.to(room).emit("difficulty", difficulty);
+                let randomQnNumber = randomInt(1, QN_COUNT + 1);
+                io.to(room).emit("questionNumber", randomQnNumber);
+                console.log(randomQnNumber);
+                io.to(room).emit("difficulty", difficulty);
             });
         });
     }
