@@ -37,7 +37,7 @@ export default function Question({ question }: { question: QuestionType | undefi
                                             ) : _.isArray(example.input) ? (
                                                 <code key={index}>{JSON.stringify(example.input)}</code>
                                             ) : (
-                                                <code>{example.input}</code>
+                                                <code>{example.input.toString()}</code>
                                             )}
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@ export default function Question({ question }: { question: QuestionType | undefi
                                             ) : _.isArray(example.output) ? (
                                                 <code key={index}>{JSON.stringify(example.output)}</code>
                                             ) : (
-                                                <code>{example.output}</code>
+                                                <code>{example.output.toString()}</code>
                                             )}
                                         </div>
                                     </div>
