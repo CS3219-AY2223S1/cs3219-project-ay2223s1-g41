@@ -21,6 +21,8 @@ const Room = () => {
     const router = useRouter();
     const { roomNum } = router.query;
     const [input, setInput] = useState("");
+    const [syncInput, setSyncInput] = useState("");
+    const [isSynced, setIsSynced] = useState(false);
     const [chats, setChats] = useState<Message[]>([]);
 
     const [questionNumber, setQuestionNumber] = useState<number | undefined>(undefined);
@@ -33,6 +35,15 @@ const Room = () => {
     useEffect(() => {
         socketInitializer();
     }, []);
+
+    useEffect(()=> {
+        if (!isSynced) { // if my change
+            console.log("mychange")
+            socket?.emit("collab-edit", roomNum, input, socket.id);
+        } else {
+            setIsSynced(!isSynced);
+        }
+    }, [input]);
 
     useEffect(() => {
         if (questionNumber !== undefined && difficulty !== undefined) {
@@ -47,8 +58,12 @@ const Room = () => {
         socket = io();
         socket.emit("join-room", roomNum);
 
-        socket.on("receive-collab-edit", (message: any) => {
-            setInput(message);
+        socket.on("receive-collab-edit", (message: any, socketId: any) => {
+            if (socketId !== socket.id) {
+                console.log("receive changes from", socketId, "To", socket.id);
+                setIsSynced(true);
+                setInput(message);
+            }
         });
 
         socket.on("message-received", (allChats: Message[]) => {
@@ -78,7 +93,6 @@ const Room = () => {
 
     function onChangeHandler(value: any, event: any) {
         setInput(value);
-        socket.emit("collab-edit", roomNum, value);
     }
 
     return (
