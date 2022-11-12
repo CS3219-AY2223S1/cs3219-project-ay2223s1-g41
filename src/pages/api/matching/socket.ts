@@ -175,7 +175,7 @@ export default function SocketHandler(req: any, res: any) {
             // }
 
             socket.on("collab-edit", (room, message) => {
-                io.to(room).emit("receive-collab-edit", message);
+                io.to(room).emit("receive-collab-edit", message, socket.id);
             });
 
             socket.on("send-message", (room: string, message: { sender: string; time: Date; message: string }) => {
